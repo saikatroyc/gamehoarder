@@ -25,7 +25,7 @@ BODY STYLING
 }
 
 body {
-	background: url('images/bg.png');
+	background: url('../images/bg.png');
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-weight:300;
 	text-align: left;
@@ -76,7 +76,7 @@ body {
 	margin-left: -300px;
 	margin-top: -300px;
 	
-	background: url(images/gradient.png) no-repeat;
+	background: url(../images/gradient.png) no-repeat;
 }
 */
 
@@ -92,7 +92,7 @@ body {
 	z-index: -2;
 	
 	/* Fallback */ 
-	background-image: url(images/gradient.png); 
+	background-image: url(../images/gradient.png); 
 	background-repeat: no-repeat; 
 	
 	/* CSS3 Gradient */
@@ -210,12 +210,12 @@ CONTENT
 
 .user-icon {
 	top:153px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
-	background: rgba(65,72,72,0.75) url(images/user-icon.png) no-repeat center;	
+	background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;	
 }
 
 .pass-icon {
 	top:201px;
-	background: rgba(65,72,72,0.75) url(images/pass-icon.png) no-repeat center;
+	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
 
 .content input:focus + div{

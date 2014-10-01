@@ -6,7 +6,7 @@
     <title>
         HTML Document Structure
     </title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
 
 </head>
 <body>

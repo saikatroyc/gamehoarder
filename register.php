@@ -38,7 +38,7 @@ end:
     <title>
         Register
     </title>
-    <link rel="stylesheet" type="text/css" href="style1.css" />
+    <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
 </head>
 <body>
 
