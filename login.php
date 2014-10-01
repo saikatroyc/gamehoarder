@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/respond.js"></script>
+</head>
+<body class="container">
 <?php
 if (isset($_POST['register'])) {
     // signup the new user in a different form
@@ -44,3 +55,6 @@ if ($username && $password) {
     echo "<p><a href='index.php'>Click</a> to try again</p>";
 } 
 ?>
+
+</body>
+</html>
