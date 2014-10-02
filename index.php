@@ -58,7 +58,7 @@
                     //print_r($record);
                     $dbuser = $record['name'];
                     $passwd = $record['passwd'];
-                    if ($passwd == $password && $dbuser == $username) {
+                    if ($passwd == sha1($password) && $dbuser == $username) {
                         $_SESSION['username'] = $dbuser;
                         echo "You are in ". "!!<br>";
                         // user is validated. time for action

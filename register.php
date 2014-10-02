@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // username name is new. add it to db
             //func_add_user($dth, $username, $password, $email);
             $user_record['name'] = $username;
-            $user_record['pass'] = $passwd;
+            $user_record['pass'] = sha1($passwd);
             $user_record['email'] = $email;
             func_insert_new_user($conn, $user_record);
             func_closeDbConection($conn);

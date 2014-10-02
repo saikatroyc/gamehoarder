@@ -118,7 +118,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `username` varchar(10) NOT NULL,
-  `password` varchar(25) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
   `email` varchar(25) NOT NULL DEFAULT '',
   PRIMARY KEY (`username`),
   UNIQUE KEY `username` (`username`)
@@ -131,7 +131,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('manish','manish','itzsaikat4u@gmail.com'),('masa','masa','saikat1_4u@yahoo.co.in'),('saikat','saikat','saikat1_4u@yahoo.co.in'),('shyam','shyam','saikat1_4u@yahoo.co.in'),('suhas','suhas','saikat1_4u@yahoo.co.in');
+INSERT INTO `users` VALUES ('rahul','8b2357213c6def665b79c46ac43e562ce5e10eef','saikat1_4u@yahoo.co.in'),('saikat','e19ca3f5d8fa9424712a325eb9ce91961a8a4565','saikat1_4u@yahoo.co.in'),('shyam','ced1715404d81cfb20afdcdfc4a2558796773e61','itzsaikat4u@gmail.com'),('suhas','41a782a050d3c06ee42dee8592e3e5b129c9e7f5','saikat1_4u@yahoo.co.in');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -144,4 +144,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-30  0:34:00
+-- Dump completed on 2014-10-01 20:34:09
