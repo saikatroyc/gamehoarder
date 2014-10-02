@@ -1,3 +1,10 @@
+<?php
+    session_start(); 
+    if (isset($_SESSION['username'])) {
+    } else {
+        header("Location: index.php");
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,4 +59,5 @@
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
+<?php echo "hello ". $_SESSION['username'];?>
 </html>
