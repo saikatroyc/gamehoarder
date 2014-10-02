@@ -15,7 +15,7 @@
 
 	<form name="login-form" class="login-form" action="" method="post">
 	
-		<div class="header jumbotron">
+		<div class="header">
 		<h1>Gamehoarder Login</h1>
 		<span>If you existing user, login back!</span>
 		</div>

@@ -45,7 +45,7 @@ end:
 <div id="wrapper">
 	<form name="Registration-form" class="login-form" action="" method="post">
 	
-		<div class="header jumbotron">
+		<div class="header">
 		<h1>Registration Form</h1>
 		<span>Select a Username, Password, email</span>
 		</div>
