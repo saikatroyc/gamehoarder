@@ -1,1 +1,1 @@
-gamehoarder webapp to manager game collections
+gamehoarder webapp to manag game collections
