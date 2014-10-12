@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // username name is new. add it to db
             //func_add_user($dth, $username, $password, $email);
             $user_record['name'] = $username;
-            $user_record['pass'] = sha1($passwd);
+            $user_record['pass'] = $passwd;
             $user_record['email'] = $email;
             func_insert_new_user($conn, $user_record);
             func_closeDbConection($conn);
@@ -35,9 +35,7 @@ end:
 <html lang='en'>
 <head>
     <meta charset="UTF-8" /> 
-    <title>
-        Register
-    </title>
+    <title>Register</title>
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
 </head>
 <body>
