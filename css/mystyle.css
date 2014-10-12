@@ -25,7 +25,8 @@ BODY STYLING
 }
 
 body {
-	background: url('../images/bg.png');
+	/*background: url('../images/back.jpg');*/
+    background-color: #d8d8d8;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-weight:300;
 	text-align: left;
