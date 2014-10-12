@@ -75,6 +75,7 @@
       </ol>
       <div class="carousel-inner">
         <div class="item active">
+          <img src="images/back.jpg" alt="">
           <div class="container">
             <div class="carousel-caption">
               <h1>Welcome to Gamehoarder!!</h1>
@@ -83,6 +84,7 @@
           </div>
         </div>
         <div class="item">
+          <img src="images/back.jpg" alt="">
           <div class="container">
             <div class="carousel-caption">
               <h1>Track your games</h1>
@@ -92,6 +94,7 @@
           </div>
         </div>
         <div class="item">
+          <img src="images/back.jpg" alt="">
           <div class="container">
             <div class="carousel-caption">
               <h1>Recommendations</h1>
