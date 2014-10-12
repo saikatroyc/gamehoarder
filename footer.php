@@ -1,3 +1,5 @@
 <div class="footer">
-THIS IS A FOOTER
+<footer>
+    <p>© Gamehoarder</p>
+</footer>
 </div>

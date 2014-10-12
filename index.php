@@ -17,7 +17,7 @@
 	
 		<div class="header">
 		<h1>Gamehoarder Login</h1>
-		<span>If you existing user, login back!</span>
+		<!--span>If you are existing user, login back!</span-->
 		</div>
 	
 		<div class="content">
@@ -58,19 +58,19 @@
                     //print_r($record);
                     $dbuser = $record['name'];
                     $passwd = $record['passwd'];
-                    if ($passwd == sha1($password) && $dbuser == $username) {
+                    if ($passwd == $password && $dbuser == $username) {
                         $_SESSION['username'] = $dbuser;
-                        echo "You are in ". "!!<br>";
+                        echo "You successfully logged in!<br>";
                         // user is validated. time for action
-                        echo "<h4>session started at:". date('l'). date('H:i'). "hrs</h4>";
+                        echo "<h4>session started at: ". date('l'). date('H:i'). "hrs</h4>.<br>";
                         echo "<p><a href='logout.php'>Logout</a></p>";
                         $ret = true;
                     } else {
-                        echo "invalid password";
-                        $ret = false;
+                        echo "Invalid password.";
+                        $ret=false;
                     }
                 } else {
-                    echo "Username doesnt exist!";
+                    echo "Username doesn't exist!";
                     $ret = false;
                 }
                 if ($ret == false) {
@@ -84,7 +84,7 @@
             //func_closeDbConection($conn);
             $conn = NULL;
         } else {
-            echo "username password needed to login!";
+            echo "Username and password are needed to login!";
             echo "<p><a href='index.php'>Click</a> to try again</p>";
         } 
     }
