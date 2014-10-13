@@ -141,6 +141,35 @@ function func_getGames($conn, $search) {
     }
 }
 
+function func_getGamesByDev($conn, $search) {
+    //returns an assoc array of username password and email
+    //echo "get user called for :". $username;
+    $op=NULL;
+    if ($conn == NULL) {
+        //$op = NULL;
+        return NULL;
+    } else {
+        try {
+            // uname is a primary key, so atmost one row expected
+            $stmt = $conn->prepare("SELECT game FROM Develops WHERE developer LIKE ?");
+            $like="$search%";
+            $stmt->execute(array($like));
+            $result = $stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count] = $row[0];
+                $count+=1;
+            }
+        } catch (PDOException $e) {
+            echo "Could not connect to DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+            $op = NULL;
+        }
+        return $op;
+    }
+}
+
 function func_prepareGamesPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
