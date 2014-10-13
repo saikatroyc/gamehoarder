@@ -24,6 +24,7 @@
         <div class="form-group">
           <input name="search_input" type="text" class="form-control" placeholder="Search Games">
           <input type="submit" name="search" class="btn btn-default" value="Search">
+          <input type="submit" name="dev" class="btn btn-default" value="Search by Dev">
         </div>       
       </form>
     
@@ -41,6 +42,19 @@ if (isset($_POST['search'])) {
     $conn = func_connect_db("gamehoarder");
     if ($conn) {
         $game_list=func_getGames($conn, $search);
+        foreach($game_list as $gl) {
+            echo $gl;
+            echo "<br>";
+        }
+    }
+}
+
+if (isset($_POST['dev'])) {
+    $search = $_POST['search_input'];
+    require 'pdo_db_connect.php';
+    $conn = func_connect_db("gamehoarder");
+    if ($conn) {
+        $game_list=func_getGamesbyDev($conn, $search);
         foreach($game_list as $gl) {
             echo $gl;
             echo "<br>";
