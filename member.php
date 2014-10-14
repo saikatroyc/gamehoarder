@@ -26,10 +26,10 @@
 <!-- NAVBAR
 ================================================== -->
   <body>
-    <div class="navbar-wrapper">
+    <div class="navbar-wrapper" style="opacity: 0.6; top: 0px;">
       <div class="container">
 
-        <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
