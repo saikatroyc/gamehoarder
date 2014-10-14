@@ -16,6 +16,8 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
+    <script src="http://fb.me/react-with-addons-0.11.2.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -29,6 +31,9 @@
       </form>
     
       <a href="member.php">Click here</a> to go back.
+        <div class="container" id="searchresults">
+    
+        </div>
 
 </div>
 <!-- javascript -->
@@ -42,10 +47,7 @@ if (isset($_POST['search'])) {
     $conn = func_connect_db("gamehoarder");
     if ($conn) {
         $game_list=func_getGames($conn, $search);
-        foreach($game_list as $gl) {
-            echo $gl;
-            echo "<br>";
-        }
+        echo '<script>results = ' . json_encode($game_list) . ';</script>';
     }
 }
 
@@ -55,12 +57,63 @@ if (isset($_POST['dev'])) {
     $conn = func_connect_db("gamehoarder");
     if ($conn) {
         $game_list=func_getGamesbyDev($conn, $search);
-        foreach($game_list as $gl) {
-            echo $gl;
-            echo "<br>";
-        }
+        echo '<script>results = ' . json_encode($game_list) . ';</script>';
     }
 }
 ?>
+
+<script type="text/jsx">
+        /**
+         * @jsx React.DOM
+         */
+        (function(){
+
+            var res = results;
+
+            function render() {
+                React.renderComponent(
+                <Search />,
+                document.getElementById('searchresults')
+                );
+            }
+
+            var Search = React.createClass({
+                getInitialState: function() {
+                    return {
+                        items: res
+                    }
+                },
+
+                _renderItem: function(item) {
+                    return (
+                       <ResultItem game={item} />
+                    );
+                },
+
+                render: function() {
+                    return (
+                        <ul class="list-group">
+                            {this.state.items.map(this._renderItem)}
+                        </ul>
+                    );
+                }
+            });
+
+            var ResultItem = React.createClass({
+                render: function() {
+                    return (
+                        <div>
+                            <li class="list-group-item">
+                                {this.props.game}
+                            </li>
+                            <input type="submit" name="add" class="btn btn-default" value="add to collection" />
+                        </div>
+                    );
+                }
+            })
+
+            render();
+        })();
+</script>
 
 </html>
