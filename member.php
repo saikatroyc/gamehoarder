@@ -46,7 +46,7 @@
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#Graphs" id="graphs">TrackUrGames</a></li>
           <li><a href="#Lucky" id="recommend">Recommendations</a></li>
-          <li><a href="#Lucky" id="search">Search</a></li>
+          <li><a href="search.php">Search</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
@@ -153,10 +153,6 @@
     $("#recommend").on('click',
     function() {
         recommend();
-    });
-    $("#search").on('click',
-    function() {
-        window.location.href="search.php";
     });
     function about()
     {
