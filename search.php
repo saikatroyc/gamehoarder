@@ -57,18 +57,26 @@
      </div>
     </div>
     </div>
-
-<div id="wrapper">
-    
-      <form name="search_form" class="navbar-form navbar-left" role="search" method="post">
+<div class="container">
+    <div class="page-header">
+        <div class="clearfix">
+            <div class="col-md-12 col-sm-6 col-xs-12 text-center">
+                <h1>Search your favourite games</br><small>Now you can search your games by name or by developers</small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+      <form name="search_form" class="col-md-12" role="search" method="post">
         <div class="form-group">
-          <input name="search_input" type="text" class="form-control" placeholder="Search Games">
-          <input type="submit" name="search" class="btn btn-default" value="Search">
-          <input type="submit" name="dev" class="btn btn-default" value="Search by Dev">
+          <input name="search_input" type="text" class="form-control" placeholder="Explore">
+          <input type="submit" name="search" class="btn btn-primary btn-lg btn-block" value="Searchby Games">
+          <input type="submit" name="dev" class="btn btn-primary btn-lg btn-block" value="Searchby Dev">
+          <span><a href="#" class="pull-left">Need help?</a></span>
         </div>       
       </form>
-    
-      <a href="member.php">Click here</a> to go back.
+    </div>
+</div> <!--end container-->
+<div id="wrapper">
         <div class="container" id="searchresults">
 <img id="d2" src="images/bg.png" width="300" height="240" />
 <div class="contenthover">
