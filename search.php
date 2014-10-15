@@ -8,18 +8,22 @@
     }
 ?>
 <html lang='en'>
-<head>
-    <meta charset="UTF-8" /> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <title>Search</title>
-    <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
-    <link rel="stylesheet" type="text/css" href="css/contenthover.css" />
-    <!-- Bootstrap -->
+
+    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/carousel.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
     <script src="http://fb.me/react-with-addons-0.11.2.js"></script>
     <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
-</head>
+  </head>
 <body>
     <div class="navbar-wrapper" style="opacity: 0.6; top: 0px;">
       <div class="container">
