@@ -126,7 +126,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
         var str = "insertuser=" + encodeURIComponent(user) + 
         "&insertgame=" + encodeURIComponent(game);
         str = "pdo_db_connect.php?" + str;
-        //alert(str);
+        alert(game+" added to collection");
         xmlhttp.open("GET",str,true);
         xmlhttp.send();
     }
