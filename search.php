@@ -89,7 +89,7 @@
 <?php
 if (isset($_POST['search']) || isset($_POST['dev'])) {
     $search = $_POST['search_input'];
-    /*-------------------------------------------------------------------------*/
+    if ($search !== "") {
     require 'pdo_db_connect.php';
     $conn = func_connect_db("gamehoarder");
     if ($conn) {
@@ -111,11 +111,12 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         <h5>Name: " . $game_list[$i]['name'] . "</h5> <p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
-                        <p><a href=\"#\" class=\"mybutton\">Add</a></p>
+                        <p><a href=\"#\" class=\"btn btn-default\">Add</a></p>
                     </div>
                 </div>";
         }
         echo"</div></div>";
+    }
     }
 }
 ?>
