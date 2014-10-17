@@ -92,6 +92,32 @@ INSERT INTO `Games` VALUES ('Puzzler Mind Gym 3D',0,'null',NULL),('Puzzler World
 UNLOCK TABLES;
 
 --
+-- Table structure for table `OwnsGames`
+--
+
+DROP TABLE IF EXISTS `OwnsGames`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OwnsGames` (
+  `username` varchar(10) NOT NULL,
+  `game` varchar(50) NOT NULL,
+  PRIMARY KEY (`username`,`game`),
+  KEY `game` (`game`),
+  CONSTRAINT `OwnsGames_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `OwnsGames_ibfk_2` FOREIGN KEY (`game`) REFERENCES `Games` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `OwnsGames`
+--
+
+LOCK TABLES `OwnsGames` WRITE;
+/*!40000 ALTER TABLE `OwnsGames` DISABLE KEYS */;
+/*!40000 ALTER TABLE `OwnsGames` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Platform`
 --
 
@@ -160,7 +186,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('root','root','saikat1_4u@yahoo.co.in'),('saikat','saikat1','saikat1_4u@yahoo.co.in');
+INSERT INTO `users` VALUES ('root','root','saikat1_4u@yahoo.co.in'),('saikat','saikat','saikat1_4u@yahoo.co.in');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-10-12  3:39:08
+-- Dump completed on 2014-10-17  0:43:24
