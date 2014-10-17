@@ -146,7 +146,7 @@ function func_getGames($conn, $search) {
 
 function func_getGamesByDev($conn, $search) {
     //returns an assoc array of username password and email
-    //echo "get user called for :". $username;
+    //echo "get dev called for". $search;
     $op=NULL;
     if ($conn == NULL) {
         //$op = NULL;
@@ -154,13 +154,16 @@ function func_getGamesByDev($conn, $search) {
     } else {
         try {
             // uname is a primary key, so atmost one row expected
-            $stmt = $conn->prepare("SELECT game FROM Develops WHERE developer LIKE ?");
+            $stmt = $conn->prepare("select Games.name, Games.rating, Games.genre, Games.year from Develops,Games where Games.name = Develops.game and Develops.developer like ?");
             $like="$search%";
             $stmt->execute(array($like));
             $result = $stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
-                $op[$count] = $row[0];
+                $op[$count]['name'] = $row[0];
+                $op[$count]['rating'] = $row[1];
+                $op[$count]['genre'] = $row[2];
+                $op[$count]['year'] = $row[3];
                 $count+=1;
             }
         } catch (PDOException $e) {
