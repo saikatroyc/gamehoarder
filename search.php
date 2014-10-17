@@ -21,8 +21,6 @@
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
-    <script src="http://fb.me/react-with-addons-0.11.2.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
   </head>
 <body>
     <div class="navbar-wrapper" style="opacity: 0.6; top: 0px;">
@@ -82,6 +80,7 @@
 </div> <!--end container-->
 </div>
 <!-- javascript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/contenthover.js"></script>
@@ -111,7 +110,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         <h5>Name: " . $game_list[$i]['name'] . "</h5> <p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
-                        <p><a href=\"#\" class=\"btn btn-default\">Add</a></p>
+                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"func1('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
                     </div>
                 </div>";
         }
@@ -120,6 +119,18 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
     }
 }
 ?>
+<script type="text/javascript">
+    function func1(game,user) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+        var str = "insertuser=" + encodeURIComponent(user) + 
+        "&insertgame=" + encodeURIComponent(game);
+        str = "pdo_db_connect.php?" + str;
+        //alert(str);
+        xmlhttp.open("GET",str,true);
+        xmlhttp.send();
+    }
+</script>
 <script type="text/javascript">
     $('document').ready(function(){
     $('.myhover').contenthover({
@@ -134,58 +145,4 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
     });
     });
 </script>
-<script type="text/jsx">
-        /**
-         * @jsx React.DOM
-         */
-        (function(){
-
-            var res = results;
-
-            function render() {
-                React.renderComponent(
-                <Search />,
-                document.getElementById('searchresults')
-                );
-            }
-
-            var Search = React.createClass({
-                getInitialState: function() {
-                    return {
-                        items: res
-                    }
-                },
-
-                _renderItem: function(item) {
-                    return (
-                       <ResultItem game={item} />
-                    );
-                },
-
-                render: function() {
-                    return (
-                        <ul class="list-group">
-                            {this.state.items.map(this._renderItem)}
-                        </ul>
-                    );
-                }
-            });
-
-            var ResultItem = React.createClass({
-                render: function() {
-                    return (
-                        <div>
-                            <li class="list-group-item">
-                                {this.props.game}
-                            </li>
-                            <input type="submit" name="add" class="btn btn-default" value="add to collection" />
-                        </div>
-                    );
-                }
-            })
-
-            render();
-        })();
-</script>
-
 </html>
