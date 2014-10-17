@@ -1,4 +1,29 @@
 <?php
+
+
+$cars = array
+  (
+  array("Volvo",22,18),
+  array("BMW",15,13),
+  array("Saab",5,2),
+  array("Land Rover",17,15)
+  );
+
+    echo "count 2d array:".count($cars[0]);
+    require 'pdo_db_connect.php';
+    $search = "far";
+    $conn = func_connect_db("gamehoarder");
+    if ($conn) {
+        $game_list=func_getGames($conn, $search);
+        print_r($game_list);
+        echo "count:". count($game_list);
+        for ($i = 0;$i<count($games_list);$i++) {
+            echo "game:". $game_list[$i]['name'];
+            echo "<br>game:". $game_list[$i]['rating'];
+            echo "<br>game:". $game_list[$i]['genre'];
+            echo "<br>game:". $game_list[$i]['year'];
+        }
+    }
     /*this file is to just test out various insert/delete/update query on DB*/
     $GAMENAME = 0;
     $YEAR = 1;
@@ -11,13 +36,14 @@
     $TOTAL_COLS = 8; 
     echo"<h1>populate DB</h1>";
     require('pdo_db_connect.php');
+
     $conn = func_connect_db("gamehoarder");
                     $dev['NAME'] = $assoc_line[$DEV];
                     $dev['COUNTRY'] = NULL;
                     echo $dev['NAME']. "<br>";
                     func_populate($conn, $pdo_Developers, $dev);
     // read file
-    $file_handle = fopen("games.txt", "r");
+    //$file_handle = fopen("games.txt", "r");
     if ($file_handle) {
         echo"file handle obtained";
         $flag = false;

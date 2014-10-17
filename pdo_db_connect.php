@@ -128,7 +128,10 @@ function func_getGames($conn, $search) {
             $result = $stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
-                $op[$count] = $row[0];
+                $op[$count]['name'] = $row[0];
+                $op[$count]['rating'] = $row[1];
+                $op[$count]['genre'] = $row[2];
+                $op[$count]['year'] = $row[3];
                 $count+=1;
             }
         } catch (PDOException $e) {

@@ -80,16 +80,16 @@
       </form>
     </div>
 </div> <!--end container-->
-<div id="wrapper">
+        <!--<div id="wrapper">
         <div class="container" id="searchresults">
-<img id="d2" src="images/bg.png" width="300" height="240" />
-<div class="contenthover">
-    <h3>Caption</h3>
-    <p>Game details,rating </p>
-    <p><a href="#" class="mybutton">Add</a></p>
-</div>
+            <img id="d3" src="images/bg.png" width="300" height="240" />
+            <div class="contenthover">
+            <h3>Caption</h3>
+            <p>Game details,rating </p>
+            <p><a href="#" class="mybutton">Add</a></p>
+            </div>
         </div>
-
+-->
 </div>
 <!-- javascript -->
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -99,11 +99,31 @@
 <?php
 if (isset($_POST['search'])) {
     $search = $_POST['search_input'];
+    /*-------------------------------------------------------------------------*/
     require 'pdo_db_connect.php';
     $conn = func_connect_db("gamehoarder");
     if ($conn) {
         $game_list=func_getGames($conn, $search);
-        echo '<script>results = ' . json_encode($game_list) . ';</script>';
+    }
+    $numrows = count($game_list);
+    if ($numrows > 0) {
+        echo "<div class=\"container\">
+        <div class=\"row\">";
+        for ($i = 0;$i < $numrows;$i++) {
+            echo"<div class=\"container\">
+            <div class=\"container thumbnail col-md-3\">
+                <img class=\"myhover\" src=\"images/thumb.jpg\" width=\"300\" height=\"240\"/>
+                <div class=\"contenthover\">
+                    <h5>Name: " . $game_list[$i]['name'] . "</h5>
+                    <p>Rating: " . $game_list[$i]['rating'] . "</p>
+                    <p>Year: " . $game_list[$i]['year'] . "</p>
+                    <p>Genre: " . $game_list[$i]['genre'] ."</p>
+                    <p><a href=\"#\" class=\"mybutton\">Add</a></p>
+                </div>
+            </div>
+            </div>";
+        }
+        echo"</div></div>";
     }
 }
 
@@ -119,12 +139,16 @@ if (isset($_POST['dev'])) {
 ?>
 <script type="text/javascript">
     $('document').ready(function(){
-    $('#d2').contenthover({
+$('.myhover').contenthover({
+    overlay_width:240,
+    overlay_height:160,
     effect:'slide',
-    slide_speed:300,
+    slide_direction:'right',
+    overlay_x_position:'right',
+    overlay_y_position:'center',
     overlay_background:'#000',
-    overlay_opacity:0.5
-    });
+    overlay_opacity:0.8
+});
     });
 </script>
 <script type="text/jsx">
