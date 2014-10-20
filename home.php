@@ -15,7 +15,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>GameHoarder</title>
+    <title>Game Hoarder</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">GameHoarder</a>
+              <a class="navbar-brand" href="#">Game Hoarder</a>
             </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -50,9 +50,9 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">MyAccount <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="change_password.php">ChangePassword</a></li>
+              <li><a href="change_password.php">Change Password</a></li>
               <li class="divider"></li>
               <li><a href="logout.php">Logout</a></li>
             </ul>
@@ -64,75 +64,44 @@
       </div>
     </div>
 
-    <!-- Carousel
-    ================================================== -->
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="item active">
-          <img src="images/back.jpg" alt="">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Welcome to Gamehoarder!!</h1>
-              <p>Your onestop store for game collections</p>
+<div class="container">
+    <div class="page-header">
+        <div class="clearfix">
+            <div class="col-md-12 col-sm-6 col-xs-12 text-center">
+                <h1>This is your current game collection!<br></h1>
             </div>
-          </div>
         </div>
-        <div class="item">
-          <img src="images/back.jpg" alt="">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Track your games</h1>
-              <p>Keep track of all your games collection. Get interactive visualization of your games</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+    </div>
+</div> <!--end container-->
+<?php
+require 'pdo_db_connect.php';
+$conn = func_connect_db("gamehoarder");
+$username=$_SESSION['username'];
+$game_list=func_getGamesUser($conn, $username);
+$numrows = count($game_list);
+if ($numrows > 0) {
+    echo "<div class=\"container\">
+    <div class=\"row\">";
+    for ($i = 0;$i < $numrows;$i++) { 
+        echo"
+            <div class=\"col-md-6\" >
+                <h5>" . $game_list[$i]['game'] . "</h5>
             </div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="images/back.jpg" alt="">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Recommendations</h1>
-              <p>Get intuitive recommendations of hot trending games</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn More</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-    </div><!-- /.carousel -->
-
-    <div class="container marketing">
-
-
-
-      <!-- START THE FEATURETTES -->
-
-      <hr class="featurette-divider">
-      <div class="row featurette">
-        <div class="col-md-10">
-          <h2 class="featurette-heading">Description of features<span class="text-muted">Comment</span></h2>
-          <p class="lead">Detailed description of feature.</p>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-      <!-- /END THE FEATURETTES -->
-
+            <div class=\"col-md-6\" >
+                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "')\">Delete</a></p>
+            </div>";            
+    }
+    echo"</div></div>";
+} else {
+    echo "No games in collection yet!";
+}
+?>    
 
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
         <p>&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
       </footer>
-
-    </div><!-- /.container -->
 
 
     <!-- Bootstrap core JavaScript
@@ -166,8 +135,51 @@
     {
         document.getElementById("info").innerHTML="TBD://game recommendations";
     }
+    function deleteGameUser(game,user) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlHttp=null;
+        var sres;
+        
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "deleteuser=" + encodeURIComponent(user) + 
+            "&deletegame=" + encodeURIComponent(game);
+            str = "pdo_db_connect.php?" + str;
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                alert(game+" deleted, you shithead did you lose another game you autistic fuck?");
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }
+    }
     </script>
-<?php echo "hello ". $_SESSION['username'];?>
+<?php //echo "hello ". $_SESSION['username'];?>
   </body>
 </html>
 

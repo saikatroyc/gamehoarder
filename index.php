@@ -1,93 +1,153 @@
 <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-<html lang='en'>
-<head>
-    <meta charset="UTF-8" /> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamehoarder</title>
-    <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
-    <!-- Bootstrap -->
+    <title>GameHoarder</title>
+
+    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/carousel.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
-</head>
-<body>
-<div id="wrapper">
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    <div class="navbar-wrapper" style="opacity: 0.6; top: 0px;">
+      <div class="container">
 
-	<form name="login-form" class="login-form" action="" method="post">
-	
-		<div class="header">
-		<h1>Gamehoarder Login</h1>
-		<!--span>If you are existing user, login back!</span-->
-		</div>
-	
-		<div class="content">
-		<input name="username" type="text" class="input username" placeholder="Username" />
-		<div class="user-icon"></div>
-		<input name="password" type="password" class="input password" placeholder="Password" />
-		<div class="pass-icon"></div>		
-		</div>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">GameHoarder</a>
+            </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">AboutUs</a></li>
+        </ul>
+        </div><!-- /.navbar-collapse -->
+        </div>
+        </div>
+      </div>
+    </div>
 
-		<div class="footer">
-		<input type="submit" name="login" value="Login" class="button" />
-		<input type="submit" name="register" value="Register" class="register" onclick=redirectRegister() />
-		</div>
-	
-	</form>
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="images/back.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Welcome to Gamehoarder!!</h1>
+              <p>Your onestop store for game collections</p>
+              <p><a class="btn btn-lg btn-primary" href="login.php" role="button">GetStarted</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="images/back.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Track your games</h1>
+              <p>Keep track of all your games collection. Get interactive visualization of your games</p>
+              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="images/back.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Recommendations</h1>
+              <p>Get intuitive recommendations of hot trending games</p>
+              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn More</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
 
-</div>
-<!-- javascript -->
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <div class="container marketing">
+
+
+
+      <!-- START THE FEATURETTES -->
+
+      <hr class="featurette-divider">
+      <div class="row featurette">
+        <div class="col-md-10">
+          <h2 class="featurette-heading">Description of features<span class="text-muted">Comment</span></h2>
+          <p class="lead">Detailed description of feature.</p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-</body>
-<?php
-    if (isset($_POST['register'])) {
-        // signup the new user in a different form
-        header("Location: register.php");
-    } elseif (isset($_POST['login'])) {
-        // insert code to check valid user
-        session_start();
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        if ($username && $password) {
-            require 'pdo_db_connect.php';
-            $conn = func_connect_db("gamehoarder");
-            if ($conn) {
-                // expected assoc array
-                $record = func_getUserCredential($conn, $username);
-                if ($record != NULL) {
-                    //print_r($record);
-                    $dbuser = $record['name'];
-                    $passwd = $record['passwd'];
-                    if ($passwd == $password && $dbuser == $username) {
-                        $_SESSION['username'] = $dbuser;
-                        echo "You successfully logged in!<br>";
-                        // user is validated. time for action
-                        echo "<h4>session started at: ". date('l'). date('H:i'). "hrs</h4>.<br>";
-                        echo "<p><a href='logout.php'>Logout</a></p>";
-                        $ret = true;
-                    } else {
-                        echo "Invalid password.";
-                        $ret=false;
-                    }
-                } else {
-                    echo "Username doesn't exist!";
-                    $ret = false;
-                }
-                if ($ret == false) {
-                    echo "<p><a href='index.php'>Click</a> to try again</p>";
-                } else {
-                    // session user is set, retrieve this is member.php
-                    header("Location: member.php");
-                }
-            }
-            // once done close db
-            //func_closeDbConection($conn);
-            $conn = NULL;
-        } else {
-            echo "Username and password are needed to login!";
-            echo "<p><a href='index.php'>Click</a> to try again</p>";
-        } 
+    <script>
+    $("#about").on('click',
+    function() {
+        about();
+    });
+    $("#graphs").on('click',
+    function() {
+        graphs();
+    });
+    $("#recommend").on('click',
+    function() {
+        recommend();
+    });
+    function about()
+    {
+        document.getElementById("info").innerHTML="game collection site";
     }
-?>
-
+    function graphs()
+    {
+        document.getElementById("info").innerHTML="TBD://track your games";
+    }
+    function recommend()
+    {
+        document.getElementById("info").innerHTML="TBD://game recommendations";
+    }
+    </script>
+  </body>
 </html>
+

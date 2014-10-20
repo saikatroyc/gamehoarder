@@ -38,7 +38,7 @@
       <input type="submit" name="change_password" value="Change Password" class="btn btn-default" />
     </form>
     
-    <a href="member.php">Click here</a> to go back.
+    <a href="home.php">Click here</a> to go back.
 
 </div>
 <!-- javascript -->
