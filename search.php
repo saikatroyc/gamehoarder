@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Search</title>
+    <title>Game Hoarder - Search</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">GameHoarder</a>
+              <a class="navbar-brand" href="#">Game Hoarder</a>
             </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -46,9 +46,9 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">MyAccount <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="change_password.php">ChangePassword</a></li>
+              <li><a href="change_password.php">Change Password</a></li>
               <li class="divider"></li>
               <li><a href="logout.php">Logout</a></li>
             </ul>
@@ -63,7 +63,7 @@
     <div class="page-header">
         <div class="clearfix">
             <div class="col-md-12 col-sm-6 col-xs-12 text-center">
-                <h1>Search your favourite games</br><small>Now you can search your games by name or by developers</small></h1>
+                <h1>Search your favourite games!</br><small>You can search your games by name or by developer name.</small></h1>
             </div>
         </div>
     </div>
@@ -78,7 +78,6 @@
       </form>
     </div>
 </div> <!--end container-->
-</div>
 <!-- javascript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -110,7 +109,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         <h5>Name: " . $game_list[$i]['name'] . "</h5> <p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
-                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"func1('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
+                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
                     </div>
                 </div>";
         }
@@ -120,9 +119,9 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
 }
 ?>
 <script type="text/javascript">
-    function func1(game,user) {
+    function insertGameUser(game,user) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
+        var xmlhttp=new XMLHttpRequest();
         var str = "insertuser=" + encodeURIComponent(user) + 
         "&insertgame=" + encodeURIComponent(game);
         str = "pdo_db_connect.php?" + str;
