@@ -104,12 +104,12 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
         for ($i = 0;$i < $numrows;$i++) { 
             echo"
                 <div class=\"container thumbnail col-md-3\" >
-                <img class=\"myhover\" src=\"images/thumb.jpg\" width=\"300\" height=\"240\"/>
-                    <div class=\"contenthover\">
-                        <h5>Name: " . $game_list[$i]['name'] . "</h5> <p>Rating: " . $game_list[$i]['rating'] . "</p>
+                <img src=\"images/thumb.jpg\" width=\"300\" height=\"240\"/>
+                    <div class=\"caption\">
+                        <h5><strong>". $game_list[$i]['name'] . "</strong></h5><p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
-                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
+                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
                     </div>
                 </div>";
         }
