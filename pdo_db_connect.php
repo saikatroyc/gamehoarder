@@ -8,10 +8,24 @@ if(isset($_GET['insertuser']) && isset($_GET['insertgame'])) {
     $user_record['name'] = $_GET['insertuser'];
     $user_record['game'] = $_GET['insertgame'];
     func_insert_game_user($conn, $user_record);
-    $testfile = fopen("test1.txt", "w");
-    fwrite($testfile, "hello");
-    fclose();
 }
+
+/*
+* Code for deleting an entry from game-user relation.
+*/
+if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
+    $conn = func_connect_db("gamehoarder");
+    $user_record['name'] = $_GET['deleteuser'];
+    $user_record['game'] = $_GET['deletegame'];
+    func_delete_game_user($conn, $user_record);
+}
+/**
+ * Function to insert entry into game-user relation
+ *
+ * @param
+ * $conn - PHP connection Object for current DB
+ * $user_record - user record containing the username and game of the entry to insert
+ */
 function func_insert_game_user($conn, $user_record) {
     // assoc array passed as input
     if ($conn) {
@@ -25,6 +39,62 @@ function func_insert_game_user($conn, $user_record) {
         }
     }
 }
+
+/*
+* Function to insert entry into game-user relation
+*
+* @param
+* $conn - PHP Connection Object for current DB
+* $user_record - user record containing the username and game of the entry to delete
+*/
+function func_delete_game_user($conn, $user_record) {
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("DELETE FROM OwnsGames WHERE username=:name AND game=:game");
+            $stmt->execute($user_record);
+        } catch (PDOException $e) {
+            echo "Could not delete record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+}
+
+/*
+* Function to fetch all games belonging to a specific user
+*
+* @param
+* $conn - PHP Data Object for current DB
+* $username - username of user whose games to fetch
+*
+* @return
+* $result - array of all games belonging to a specific user
+*/
+function func_getGamesUser($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT game FROM OwnsGames WHERE username='$username'");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Function to connect to a database
+ *
+ * @param
+ * $dbname - name of database to connect to
+ * @return
+ * $conn - PDO associated with database
+ */
 function func_connect_db($dbname) {
     try {
         $conn = new PDO("mysql:host=localhost;dbname=$dbname", "root", "root");
@@ -35,8 +105,19 @@ function func_connect_db($dbname) {
         echo "getMessage(): " . $e->getMessage () . "\n";
         $conn = NULL;
     }
-    return ($conn);
+    return $conn;
 }
+
+/*
+* Function to check if a specific user exists
+*
+* @param
+* $conn - PHP Connection Object for current DB
+* $username - username that needs to be checked in database
+*
+* @return
+* $ret - true if user exists, false if user doesn't exist
+*/
 function func_is_user_exists($conn, $username) {
     if ($conn == NULL) {
         $ret = false;
@@ -47,9 +128,6 @@ function func_is_user_exists($conn, $username) {
         $stmt->execute(array('uname' => $username));
         $result = $stmt->fetchAll();
         if (count($result)) {
-            /*foreach($result as $row) {
-                print_r($row);
-            }*/
             $ret = true;
         } else {
         $ret = false;
@@ -86,12 +164,19 @@ function func_closeDbConection($conn) {
     }
 }
 
+/*
+* Function to return a specific user's name, email, and password
+*
+* @param
+* $conn - PHP Connection Object for current DB
+* $username - username whose info the function should return
+*
+* @return
+* $op - user's name, email, and password
+*/
 function func_getUserCredential($conn, $username) {
-    //returns an assoc array of username password and email
-    //echo "get user called for :". $username;
     $op=NULL;
     if ($conn == NULL) {
-        //$op = NULL;
         return NULL;
     } else {
         try {
@@ -114,19 +199,24 @@ function func_getUserCredential($conn, $username) {
     }
 }
 
+/*
+* Function to return a change user's password
+*
+* @param
+* $conn - PHP Data Object for current DB
+* $username - username whose password needs to be changes
+* $newPassword - password to change to
+*/
 function func_changePassword($conn, $username, $newPassword) {
     if ($conn == NULL) {
         //$op = NULL;
         return NULL;    
     } else {
         try {
-            // uname is a primary key, so atmost one row expected
- /*           echo $username;
-            echo $newPassword;*/
             $stmt = $conn->prepare("UPDATE users SET password='$newPassword' WHERE username='$username'");
             $stmt->execute();
         } catch (PDOException $e) {
-            echo "Could not connect to DB.\n";
+            echo "Could not change password.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
             $conn = NULL;
             $op = NULL;
@@ -135,11 +225,8 @@ function func_changePassword($conn, $username, $newPassword) {
 }
 
 function func_getGames($conn, $search) {
-    //returns an assoc array of username password and email
-    //echo "get user called for :". $username;
     $op=NULL;
     if ($conn == NULL) {
-        //$op = NULL;
         return NULL;
     } else {
         try {
@@ -198,6 +285,11 @@ function func_getGamesByDev($conn, $search) {
     }
 }
 
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
 function func_prepareGamesPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
@@ -206,6 +298,9 @@ function func_prepareGamesPDO($conn, $flag) {
     }
     return $s; 
 }
+/*
+* Helper method for populating DB
+*/
 function func_populate($conn, $pdo, $arr) {
     if ($conn == NULL || $arr == NULL || $pdo == NULL) return;
     else {
@@ -222,6 +317,11 @@ function func_populate($conn, $pdo, $arr) {
     }
 }
 
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
 function func_prepareDeveloperPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
@@ -230,6 +330,11 @@ function func_prepareDeveloperPDO($conn, $flag) {
     }
     return $s; 
 }
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
 function func_prepareDevelopsPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
