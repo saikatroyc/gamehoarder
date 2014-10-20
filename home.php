@@ -80,28 +80,27 @@ $username=$_SESSION['username'];
 $game_list=func_getGamesUser($conn, $username);
 $numrows = count($game_list);
 if ($numrows > 0) {
-    echo "<div class=\"container\">
-    <div class=\"row\">";
+    echo "<div class=\"container\">";
     for ($i = 0;$i < $numrows;$i++) { 
-        echo"
-            <div class=\"col-md-6\" >
+        echo"<div id=\"gamerow". $i."\" class=\"row\">".
+            "<div class=\"col-md-6\" >
                 <h5>" . $game_list[$i]['game'] . "</h5>
             </div>
             <div class=\"col-md-6\" >
-                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "')\">Delete</a></p>
-            </div>";            
+                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a></p>
+            </div></div>"; 
     }
-    echo"</div></div>";
+    echo"</div>";
 } else {
     echo "No games in collection yet!";
 }
 ?>    
 
       <!-- FOOTER -->
-      <footer>
+      <div class="footer navbar-fixed-bottom">
         <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </div>
 
 
     <!-- Bootstrap core JavaScript
@@ -135,11 +134,10 @@ if ($numrows > 0) {
     {
         document.getElementById("info").innerHTML="TBD://game recommendations";
     }
-    function deleteGameUser(game,user) {
+    function deleteGameUser(game,user,id) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
-        
         try
         {
             xmlHttp=new XMLHttpRequest();
@@ -157,7 +155,6 @@ if ($numrows > 0) {
                         {
                             if(sres!='')
                             {
-                                alert(game+" deleted, you shithead did you lose another game you autistic fuck?");
                                 location.reload();
                             }
                             else

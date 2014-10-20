@@ -109,7 +109,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         <h5><strong>". $game_list[$i]['name'] . "</strong></h5><p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
-                        <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</a></p>
+                        <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
                     </div>
                 </div>";
         }

@@ -18,6 +18,7 @@ if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
     $user_record['name'] = $_GET['deleteuser'];
     $user_record['game'] = $_GET['deletegame'];
     func_delete_game_user($conn, $user_record);
+    echo $user_record['game'];
 }
 /**
  * Function to insert entry into game-user relation
