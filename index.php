@@ -70,7 +70,7 @@
             <div class="carousel-caption">
               <h1>Track your games</h1>
               <p>Keep track of all your games collection. Get interactive visualization of your games</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+              <p><a class="btn btn-lg btn-primary" href="#feat1" role="button">Learn more</a></p>
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@
             <div class="carousel-caption">
               <h1>Recommendations</h1>
               <p>Get intuitive recommendations of hot trending games</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn More</a></p>
+              <p><a class="btn btn-lg btn-primary" href="#feat2" role="button">Learn More</a></p>
             </div>
           </div>
         </div>
@@ -98,8 +98,27 @@
       <hr class="featurette-divider">
       <div class="row featurette">
         <div class="col-md-10">
-          <h2 class="featurette-heading">Description of features<span class="text-muted">Comment</span></h2>
-          <p class="lead">Detailed description of feature.</p>
+          <h2 class="featurette-heading">GameHoarder <span class="text-muted">Manage your collection</span></h2>
+          <p class="lead">GameHoarder is a video game management website that allows you to organize and visualize your
+video game collection, as well as find recommendations for new games.</p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette" id="feat1">
+        <div class="col-md-10">
+          <h2 class="featurette-heading">Visualize <span class="text-muted">View your collection</span></h2>
+          <p class="lead">View graphs to learn more about your collection, find your most owned genres, game completion rate, and more. GameHoarder tracks this information about your collection and displays it to you in a visually pleasing and informative way.</p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette" id="feat2">
+        <div class="col-md-10">
+          <h2 class="featurette-heading">Recommendations <span class="text-muted">Expand your collection</span></h2>
+          <p class="lead">Get recommendations for games to add to your collection based on the games you own. GameHoarder will track information about your game collection and provide you with recommendations based on the genres, developers or generations of games you prefer.</p>
         </div>
       </div>
 
