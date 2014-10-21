@@ -38,7 +38,7 @@ def unwiki(text, quiet = True):
     # remove full html comments
     while ("<!--" in text and "-->" in text):
         text = text[: text.find("<!--")] + text[text.find("-->") + 3 :]
-    quiet or print("-html: \t" + text)
+        quiet or print("-html: \t" + text)
 
     # remove tags, but keep inner contents
     tags = ["sup", "small", "s", "center", "u", "strong", "nowiki"]
@@ -144,14 +144,16 @@ def unwiki(text, quiet = True):
     # remove links
     while (("[[") in text and ("]]") in text):
         text = text.replace("[[", "").replace("]]", "")
-    quiet or print("-link: \t" + text)
+        quiet or print("-link: \t" + text)
 
     # remove link with single bracket
     while (("[") in text and ("]") in text and ("http") in text):
         m = re.search("(.*)\[http[^\s]+\s+(.+)\](.*)", text)
         if (m):
             text = "".join(m.groups())
-    quiet or print("-bracket: \t" + text)
+        else:
+            break
+        quiet or print("-bracket: \t" + text)
         
     # replace misc templates - vgy, Nihongo, date, color, flagicon, excl, etc
     regexes = [('', r'[V|v]gy\s*\|\|?(\d{4})(?:\|\d{4})?'),
@@ -185,13 +187,13 @@ def unwiki(text, quiet = True):
                (' ', r'[S|s]tart.?[D|d]ate\|?(\d*)\|?(\d*)\|?(\d*)[^\{\}]*?'),
                (' ', r'[E|e]nd [D|d]ate\s*\|(\d*)\|?(\d*)\|?(\d*)[^\{\}]*?'),
                ('', r'[V|v]grelease new\|([^\{\}v]*)\|v=\d\|([^\{\}]*)'),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*new\s*\|+(?:v=\d\|)?' + r'(\w*)\|?([^\{\}\|]*)(\|{0,1})' * 6),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?)'),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?\|{0,2})' * 2),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?\|{0,2})' * 3),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?\|{0,2})' * 4),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?\|{0,2})' * 5),
-               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*?\|{0,2})' * 6),
+               #(' ', r'[V|v](?:grelease|ideo game release)\s*new\s*\|+(?:v=\d\|)?' + r'(\w*)\|?([^\{\}\|]*)(\|{0,1})' * 6),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)'),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)(\|{0,2})' * 2),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)(\|{0,2})' * 3),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)(\|{0,2})' * 4),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)(\|{0,2})' * 5),
+               (' ', r'[V|v](?:grelease|ideo game release)\s*(?:new)?\s*\|{0,2}(?:v=\d\|)?'+'([^=\|\}]*)(?:=|\|)([^=\|\}]*)(\|{0,2})' * 6),
                ('', r'[V|v]grtbl(?:-tx|-bl)?\|?([^\{\}]*?)'),
                (' ', r'[V|v](?:grelease|ideo game release\*)\|'),
                (' ', r'[V|v](?:grelease|ideo game release\s*)\|{1,2}([^=\{\}]*)(=?)([^=\{\}]*?)'),
@@ -257,7 +259,7 @@ def unwiki(text, quiet = True):
     while ("<!--" in text or "-->" in text):
         text = (text[: text.find("<!--")]    if "<!--" in text else "") + \
                (text[text.find("-->") + 3 :] if "-->" in text else "")
-    quiet or print("-html: \t" + text)
+        quiet or print("-html: \t" + text)
 
     # remove italics, bold
     if ("''" in text or "\\'\\'" in text):
@@ -330,7 +332,7 @@ def convert(text):
 
 def reorder(text):
     """reorder strings that are in format [title, The] to [The title]"""
-    m = re.match("(.+), The(.*)", text)
+    m = re.match("(.+)(?:,|;) The(.*)", text)
     return "The " + m.group(1) + m.group(2) if m else text
 
 def balanceof(text):
@@ -376,7 +378,7 @@ def year(text):
         return " | ".join([year(t) for t in text.split("|") if year(t) != ""])
 
     # extract region information
-    regions = re.search(r"(([A-Z]{2,3}((,|/)[ ]?)?)+)", text)
+    regions = re.search(r"(([A-Z]{2,3}([ ]?(,|/)[ ]?)?)+)", text)
     reg_str = " " + regions.group(1) if regions else ""
 
     # search for date in format: 10/21/2003
@@ -534,6 +536,7 @@ def find_devs(text):
     """parse list of developers in delimeter separated text, return official names separated by bar"""
     text = re.sub(r', [I|i]nc', ' Inc', text)
     text = re.sub(r', [L|l][L|l][C|c]', ' LLC', text)
+    #text = text.replace("}}", "}}|").replace("{{", "|{{")
     return " | ".join( \
                 [find_dev(t.strip(" \t\n\r")) for t in
                  split_bal(text, r = r', |\n|/|\|') if #r'\n|,|/|\|
@@ -875,7 +878,7 @@ def mine_wiki_info(name, sub_url, depth = 2):
             # add current line to text accumulator
             text += line
 
-             # if next line is a continuation of first, then keep appending
+            # if next line is a continuation of first, then keep appending
             if (not(next.startswith("|") or next.startswith("!") or \
                     next.startswith("}")) or balanceof(text) > 0) and \
                 not(line.endswith("}}") and balanceof(text) < 0):
@@ -897,13 +900,7 @@ def mine_wiki_info(name, sub_url, depth = 2):
             # clear text, but save temporarily
             prev = text
             text = ""
-
-            # ignore infobox-specific attributes, distribution, etc
-            if "italic" in field or "collapsible" in field or "state" in field or \
-               "show" in field or "caption" in field or "website" in field or \
-               "spinoff" in field or "origin" in field:
-                continue
-
+            
             # check if title attribute
             if "title" in field and not "file:" in value.lower() and \
                not "image:" in value.lower():
@@ -920,22 +917,25 @@ def mine_wiki_info(name, sub_url, depth = 2):
                     games[name] = ["",] * len(attrs)
                     games[name][uind] = short_url
 
-            # find corresponding attribute
-            #print(field + ": " + value)
-            for attr, i in zip(attrs, range(len(attrs))):
-                if attr in field:
-                    #print("found: " + attr)
-                    #if "release" in attr:
-                    #   print(value)
-                    value = mine_wiki_img(get_file(value)) if "image" in attr else value
-                    value = release(value) if "release" in attr else value
-                    value = unwiki(value)
-                    value = find_devs(value) if "dev" in attr or "pub" in attr else value
-                    value = find_consoles(value) if "platform" in attr else value
-                    value = separate(value) if "url" not in attr and "image" not in attr and "release" not in attr and "dev" not in attr and "pub" not in attr else value
-                    games[name][i] += " " + value
-                    games[name][i] = games[name][i].strip(" \t\n\r")
-                    break
+            # ignore infobox-specific attributes, distribution, etc
+            if not ("italic" in field or "collapsible" in field or "state" in field or \
+               "show" in field or "caption" in field or "website" in field or \
+               "spinoff" in field or "origin" in field):
+                # find corresponding attribute
+                for attr, i in zip(attrs, range(len(attrs))):
+                    if attr in field:
+                        #print("found: " + attr)
+                        #if "release" in attr:
+                        #   print(value)
+                        value = mine_wiki_img(get_file(value)) if "image" in attr else value
+                        value = release(value) if "release" in attr else value
+                        value = unwiki(value)
+                        value = find_devs(value) if "dev" in attr or "pub" in attr else value
+                        value = find_consoles(value) if "platform" in attr else value
+                        value = separate(value) if "url" not in attr and "image" not in attr and "release" not in attr and "dev" not in attr and "pub" not in attr else value
+                        games[name][i] += " " + value
+                        games[name][i] = games[name][i].strip(" \t\n\r")
+                        break
 
             # irregular end
             if line.endswith("}}") and not (next.startswith("|") or next.startswith("!")) and \
@@ -974,7 +974,7 @@ def mine_wiki_page(title, url, f = None, games = {}, skip_to_game = None, infobo
     list_of_games = re.compile(r'[L|l]ist of.*[G|g]ames')
 
     # set up multithreading
-    N_THREADS = 32
+    N_THREADS = 64
     threads = []
     work_queue = queue.Queue()
     lock = Lock()
@@ -991,6 +991,7 @@ def mine_wiki_page(title, url, f = None, games = {}, skip_to_game = None, infobo
 
                 # find link in wiki markup text
                 (link, name) = find_wiki_url(dat)
+                #print("thread " + str(thread_id) + " mining: " + name)
 
                 # if games dict already has the game, then skip
                 if name in games:
@@ -1006,7 +1007,7 @@ def mine_wiki_page(title, url, f = None, games = {}, skip_to_game = None, infobo
                 for name in names:
                     # only update / write if not already added
                     if not name in games:
-                        print("mining: " + name)
+                        print("writing: " + name) #print("mining: " + name)
                         games[name] = new_games[name]
                         write_db(games, name, f)
 
@@ -1288,7 +1289,7 @@ def mine_wiki(f = None, games = {}, skip_to = (None, None), end_at = None, infob
         if not skip_to_plat:
             # for arcade games, visit all subpages instead of parsing main page
             if (title == "arcade"):
-                for sub in ["0..9",] + [chr(i) for i in range(65, 91)] + ["Not_released",]:
+                for sub in ["0..9",] + [chr(i) for i in range(ord('A'), ord('Z') + 1)] + ["Not_released",]:
                     games.update(mine_wiki_page(title, api_base + pf.attrib['href'][6:] + ":_" + sub, f, games, skip_to_game, infobox))
 
             # otherwise, use wiki api to find game info, by reading wiki markup source
@@ -1321,19 +1322,12 @@ def load(f = "games.txt", v = True):
         else:
             if name != "" and name != " ":
                 print("dup: " + name)
-        #if len(info) == 8:
-        #    (name, year, genr, ndev, npub, plat, area, rate) = info
-        #    if name not in games:
-        #        games[name] = (year, genr, ndev, npub, plat, area, rate)
-        #    else:
-        #        if plat == games[name][4] and v:
-        #            print("dup: " + name)
     return games
 
 devs = get_devs()
 
 if __name__ == "__main__":
     f = open('games_wiki.txt', 'a', encoding = 'utf-8')  #games.txt
-    #games = mine_wiki(f, games = load("games_wiki.txt"), skip_to = ("Nintendo DS", "Ontamarama"), infobox = True)
+    #games = mine_wiki(f, games = load("games_wiki.txt"), skip_to = (None, None), infobox = True)
     f.close()
     pass

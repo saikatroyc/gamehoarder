@@ -93,7 +93,7 @@ def test_unwiki():
 
     # remove vgrelease template, with start date, with multiple companies
     assert (m.unwiki("{{Vgrelease|NA|{{Start date|1983}}}}") == "NA 1983")
-    assert (m.unwiki("{{vgrelease|JP=Namco|NA=[[Atari, Inc.]]}}") == "JP Namco| NA Atari, Inc.")
+    assert (m.unwiki("{{vgrelease|JP=Namco|NA=[[Atari, Inc.]]}}") == "JP Namco | NA Atari, Inc.")
     assert (m.unwiki("{{vgrelease|JP= Pack-In-Video}}{{vgrelease|NA= [[THQ]]}}") == "JP Pack-In-Video NA THQ")
     assert (m.unwiki("{{Video game release||May 12, 2014}}") == "May 12, 2014")
 
@@ -226,6 +226,17 @@ def test_release():
     assert (m.release("1991-2001") == "1991-2001")
     assert (m.release("'''Xbox'''<br />{{vgrelease|NA=May 21, 2002|PAL=July 5, 2002}}'''GameCube'''<br />{{vgrelease|NA=November 18, 2002|PAL=July 11, 2003}}")
             == "Xbox (5/21/2002 NA | 7/5/2002 PAL) | GameCube (11/18/2002 NA | 7/11/2003 PAL)")
+    assert (m.release("{{collapsible list|title=July 5, 2002|'''''Soulcalibur II'''''<br />'''Arcade'''<br />{{vgrelease|JP=July 10, 2002|NA=2002}}'''GameCube''', " +
+                      "'''PlayStation 2''', & '''Xbox'''<br />{{vgrelease|JP=March 27, 2003|NA=August 27, 2003|EU=September 26, 2003}}'''''HD Online'''''<br />" +
+                      '{{vgrelease new|NA|November 19, 2013 <small>(PS3)</small><ref name="HDOnlineReleaseDate">{{cite web |last=Romano |first=Sal |date=' +
+                      "October 31, 2013 |url=http://gematsu.com/2013/10/soulcalibur-ii-hd-online-release-date-set |title=Soulcalibur II HD Online release date set " +
+                      '|publisher=Gematsu |accessdate=October 31, 2013}}</ref>|EU|November 20, 2013 <small>(PS3)</small><ref name="HDOnlineReleaseDate"/>|JP|' +
+                      'February 20, 2014<ref name="JP Date">{{cite web |date=January 27, 2014 |url=http://www.avoidingthepuddle.com/news/2014/1/27/' +
+                      "soul-calibur-ii-hd-online-gets-japanese-release-date |title=Soul Calibur II HD Online Gets Japanese Release Date |publisher=Avoiding The " +
+                      'Puddle |accessdate=January 29, 2014 (PS3)}}</ref>{{Video game release|WW|November 20, 2013 <small>(X360)</small>' +
+                      '<ref name="HDOnlineReleaseDate"/>}}}}}}')
+            == "7/5/2002 | Arcade (7/10/2002 JP | 2002 NA) | GameCube, PlayStation 2, & Xbox (3/27/2003 JP | 8/27/2003 NA | 9/26/2003 EU) | " +
+               "HD Online (11/19/2013 NA [PS3] | 11/20/2013 EU [PS3] | 2/20/2014 JP | 11/20/2013 WW [X360])")
     assert (m.release("{{collapsible list|title=November 15, 2001|titlestyle=font-weight:normal;font-size:12px;background:transparent;text-align:left|'''Xbox'''" +
                       "<br />{{vgrelease|NA=November 15, 2001<ref name=\"metacritic\"/>|EU=March 14, 2002<ref name=\"auslaunch\">{{cite web|url=" +
                       "http://www.microsoft.com/presspass/press/2002/mar02/03-14globalpr.mspx|title=Xbox Goes Global With European and Australian Launches|date=" +
@@ -236,7 +247,7 @@ def test_release():
                       "'''Games on Demand'''<br />{{vgrelease|NA=December 4, 2007<ref name=\"halo360\">{{cite web|url=http://xbox360.ign.com/" +
                       "objects/142/14218698.html|title=''Halo: Combat Evolved'' - Xbox 360|publisher=IGN|accessdate=September 17, 2010}}</ref>}}}}")
             == "11/15/2001 | Xbox (11/15/2001 NA | 3/14/2002 EU | 4/25/2002 JP) | PC (9/30/2003 NA | 10/10/2003 EU) | " +
-               "Mac OS X (12/3/2003) | Games on Demand (12/4/2007 NA)")
+               "Mac OS X (12/3/2003) | Games on Demand (12/4/2007 NA)")    
 
 def test_mine_wiki_info():
     assert (m.mine_wiki_info("Halo", "Halo:_Combat_Evolved")[1]
@@ -379,7 +390,7 @@ def test_mine_wiki_info():
     # test that efn, sfn templates are removed
     assert (m.mine_wiki_info("Watch Dogs", "Watch Dogs")[1]
             == {'Watch Dogs': ['PC, PS3, PS4, X360, XOne (5/27/2014) | WiiU (11/18/2014 NA | 11/21/2014 EU | 12/4/2014 JP)',
-                               'Action-adventure | Grand Theft Auto clone', 'Ubisoft Montreal', 'Ubisoft', 'PC | PS3 | PS4 | Xbox 360 | Xbox One | Wii U', '', '',
+                               'Action-adventure', 'Ubisoft Montreal', 'Ubisoft', 'PC | PS3 | PS4 | Xbox 360 | Xbox One | Wii U', '', '',
                                'Watch Dogs', 'https://upload.wikimedia.org/wikipedia/en/d/d9/Watch_Dogs_box_art.jpg', '', 'Disrupt | with Havok physics',
                                'Single-player | multiplayer', 'Optical disc | download', 'Jonathan Morin', 'Dominic Guay', 'Danny Belanger', 'Francis Boivin', '',
                                'Kevin Shortt', 'Brian Reitzell | Peter Connelly', '', '', '', '', '', '']})
@@ -408,6 +419,14 @@ def test_mine_wiki_info():
                 'Puella Magi Madoka Magica: The Battle Pentagram': ['12/19/2013', 'Action game', 'Artdink', 'Namco Bandai Games', 'Vita', '', '',
                                                                     'Puella_Magi_Madoka_Magica',
                                                                     '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']})
+
+    # test that infobox end is detected, even w/ caption field
+    assert (m.mine_wiki_info("Star Trek Online", "Star Trek Online")[1]
+            == {'Star Trek Online': ['PC (2/2/2010 NA | 2/5/2010 EU | 2/11/2010 AUS) | Mac (3/11/2014 INT)', 'Sci-Fi MMORPG', 'Cryptic Studios',
+                                     'Perfect World Entertainment', 'PC | OS X', '', '', 'Star Trek Online',
+                                     'https://upload.wikimedia.org/wikipedia/en/e/e2/Star_Trek_Online_cover.jpg', 'Star Trek', 'Cryptic Engine',
+                                     'Persistent world | Multiplayer | Third Person Shooter', 'Digital download | DVD-ROM',
+                                     '', '', '', '', '', '', '', '', '', '', '', '', '']})
             
     # test complex release date text
     assert (m.mine_wiki_info("Minecraft", "Minecraft")[1]
@@ -429,7 +448,7 @@ def test_all():
     test_to_canon()
     test_find_devs()
     test_release()
-    #test_mine_wiki_info()
+    test_mine_wiki_info()
 
 if __name__ == "__main__":
     test_all()
