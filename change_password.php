@@ -85,7 +85,7 @@
                 } else {
                     // session user is set, retrieve this is member.php
                     echo "Password successfully changed!";
-                    echo "<p><a href='member.php'>Click</a> to get back to. </p>";
+                    echo "<p><a href='home.php'>Click</a> to get back to. </p>";
                 }
             }
             // once done close db
