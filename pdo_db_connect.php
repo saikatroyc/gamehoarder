@@ -84,6 +84,34 @@ function func_getGamesByStatus($conn, $username, $status) {
     return $result;
 
 }
+
+
+/**
+ * this is a helper function which returns
+ * all the date specific stats about games
+ * in a user's repo
+ * code snppet to access the data on the other side
+
+ * foreach ($game_list as $row) {
+ *     echo $row['game']. $row['adddate']. "<br>";
+ * }
+ */
+function func_getGamesDateStats($conn, $username) {
+    $result=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT game, adddate, startdate, enddate FROM OwnsGames WHERE username='$username'");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+
+}
 /*
 * Function to fetch all games belonging to a specific user
 *
