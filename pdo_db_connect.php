@@ -62,6 +62,28 @@ function func_delete_game_user($conn, $user_record) {
     }
 }
 
+/**
+ * this is a helper fucntion that returns the top most trending
+ * games, based on number of users who have the game in their repo
+ */
+function func_getTopGamesByUsers($conn, $count) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top 50 most trending games. Trend by user count
+            $stmt = $conn->prepare("select game, count(*) as usercount from OwnsGames group by game order by usercount desc limit $count");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+
+}
 
 /**
  * this is a generic function that returns games by its current status.
