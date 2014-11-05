@@ -62,6 +62,28 @@ function func_delete_game_user($conn, $user_record) {
     }
 }
 
+
+/**
+ * this is a generic function that returns games by its current status.
+ * status can be inrepo(0), started(1), finished(2)
+ */
+function func_getGamesByStatus($conn, $username, $status) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT game FROM OwnsGames WHERE username='$username' AND status='$status'");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+
+}
 /*
 * Function to fetch all games belonging to a specific user
 *
