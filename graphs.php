@@ -22,6 +22,7 @@
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
+    <link href="css/sidebar.css" rel="stylesheet">
   </head>
 <!-- NAVBAR
 ================================================== -->
@@ -43,8 +44,8 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="graphs.php" id="graphs">TrackUrGames</a></li>
+          <li><a href="home.php">Home</a></li>
+          <li class="active"><a href="#" id="graphs">TrackUrGames</a></li>
           <li><a href="#Lucky" id="recommend">Recommendations</a></li>
           <li><a href="search.php">Search</a></li>
         </ul>
@@ -61,39 +62,53 @@
         </div><!-- /.navbar-collapse -->
         </div>
         </div>
-      </div>
-    </div>
 
-<div class="container">
-    <div class="page-header">
-        <div class="clearfix">
-            <div class="col-md-12 col-sm-6 col-xs-12 text-center">
-                <h1>This is your current game collection!<br></h1>
+        <div class="row">
+        <div class="col-lg-4">
+        <div id="sidebar-wrapper" style="top: 50px;">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Tracker options
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Timeline</a>
+                </li>
+                <li>
+                    <a href="#">Tables</a>
+                </li>
+                <li>
+                    <a href="#">Games In Progress</a>
+                </li>
+                <li>
+                    <a href="#">Games Complete</a>
+                </li>
+            </ul>
+        </div>
+        </div><!-- end col-->
+        
+        <div class="col-lg-8">
+        <div id="page-content-wrapper" style="padding-left: 0px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1><p>Clicl on Side menu to get personalized tracker for your games</p></h1>
+                    </div>
+                </div>
             </div>
         </div>
+        </div><!--end col-->
+        </div><!--end row-->
+
+
+
+
+
+      </div> <!-- end container-->
     </div>
-</div> <!--end container-->
+
 <?php
-require 'pdo_db_connect.php';
-$conn = func_connect_db("gamehoarder");
-$username=$_SESSION['username'];
-$game_list=func_getGamesUser($conn, $username);
-$numrows = count($game_list);
-if ($numrows > 0) {
-    echo "<div class=\"container\">";
-    for ($i = 0;$i < $numrows;$i++) { 
-        echo"<div id=\"gamerow". $i."\" class=\"row\">".
-            "<div class=\"col-md-6\" >
-                <h5>" . $game_list[$i]['game'] . "</h5>
-            </div>
-            <div class=\"col-md-6\" >
-                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a></p>
-            </div></div>"; 
-    }
-    echo"</div>";
-} else {
-    echo "No games in collection yet!";
-}
 ?>    
 
       <!-- FOOTER -->
@@ -106,6 +121,7 @@ if ($numrows > 0) {
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -134,47 +150,8 @@ if ($numrows > 0) {
     {
         document.getElementById("info").innerHTML="TBD://game recommendations";
     }
-    function deleteGameUser(game,user,id) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        var xmlHttp=null;
-        var sres;
-        try
-        {
-            xmlHttp=new XMLHttpRequest();
-            var str = "deleteuser=" + encodeURIComponent(user) + 
-            "&deletegame=" + encodeURIComponent(game);
-            str = "pdo_db_connect.php?" + str;
-            xmlHttp.onreadystatechange=function()
-            {   
-                if(xmlHttp.readyState==4)
-                {
-                    if(xmlHttp.status==200)
-                    {
-                        sres=xmlHttp.responseText;
-                        if(sres.length>0)
-                        {
-                            if(sres!='')
-                            {
-                                location.reload();
-                            }
-                            else
-                                alert('Communication NK ERROR');
-                        }
-                        else
-                            alert('Communication N2 ERROR');
-                    }
-                    else
-                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
-                }
-            }
-            xmlHttp.open('GET',str,true);
-            xmlHttp.send();
-        }    
-        catch(e)
-        {
-            alert('Communication N1 ERROR:['+e.message+']');
-        }
-    }
+    </script>
+    <script>
     </script>
 <?php //echo "hello ". $_SESSION['username'];?>
   </body>
