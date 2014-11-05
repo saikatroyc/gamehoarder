@@ -7,6 +7,7 @@ if(isset($_GET['insertuser']) && isset($_GET['insertgame'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['insertuser'];
     $user_record['game'] = $_GET['insertgame'];
+    $user_record['date'] = date('Y-m-d');
     func_insert_game_user($conn, $user_record);
 }
 
@@ -31,7 +32,7 @@ function func_insert_game_user($conn, $user_record) {
     // assoc array passed as input
     if ($conn) {
         try {
-            $s = $conn->prepare("INSERT INTO OwnsGames (username, game) value (:name, :game)");
+            $s = $conn->prepare("INSERT INTO OwnsGames (username, game, adddate) value (:name, :game, :date)");
             $s->execute($user_record);
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
