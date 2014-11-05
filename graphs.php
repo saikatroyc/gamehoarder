@@ -93,7 +93,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1><p>Clicl on Side menu to get personalized tracker for your games</p></h1>
+                        <h1><p>Click on Side menu to get personalized tracker for your games</p></h1>
                     </div>
                 </div>
             </div>
