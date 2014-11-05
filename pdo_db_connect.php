@@ -71,7 +71,7 @@ function func_getTopGamesByUsers($conn, $count) {
     $result=NULL;
     if ($conn) {
         try {
-            // get top 50 most trending games. Trend by user count
+            // get top $count most trending games. Trend by user count
             $stmt = $conn->prepare("select game, count(*) as usercount from OwnsGames group by game order by usercount desc limit $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
