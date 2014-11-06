@@ -70,6 +70,11 @@ function func_insert_game_user($conn, $user_record) {
         try {
             $s = $conn->prepare("INSERT INTO OwnsGames (username, game, adddate) value (:name, :game, :date)");
             $s->execute($user_record);
+            $username = $user_record['name'];
+            $currdate = $user_record['date'];
+            $game = $user_record['game'];
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 0, '$currdate')");
+            $s1->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -90,6 +95,12 @@ function func_delete_game_user($conn, $user_record) {
         try {
             $stmt = $conn->prepare("DELETE FROM OwnsGames WHERE username=:name AND game=:game");
             $stmt->execute($user_record);
+            $username = $user_record['name'];
+            $currdate = date('Y-m-d');
+            $game = $user_record['game'];
+            // log delete event in UserHistory
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 4, '$currdate')");
+            $s1->execute();
         } catch (PDOException $e) {
             echo "Could not delete record from DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";

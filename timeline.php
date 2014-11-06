@@ -171,6 +171,22 @@
                             </div>
                             </li>';
                             break;
+                        case 4:
+                            // user ended a game
+                            $str .=
+                            '<li '. $direction .'>
+                            <div class="tl-circ"></div>
+                            <div class="timeline-panel">
+                            <div class="tl-heading">
+                                <h4>Deleted a Game!</h4>
+                                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
+                            </div>
+                            <div class="tl-body">
+                                <p>Deleted <strong>'. $row['game'] . '</strong> from repo!!!</p>
+                            </div>
+                            </div>
+                            </li>';
+                            break;
                             
                     }
                     $count *= -1;
