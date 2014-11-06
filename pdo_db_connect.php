@@ -107,7 +107,27 @@ function func_getGamesByStatus($conn, $username, $status) {
 
 }
 
+/**
+ * This is a helper fucntion to get user history
+ */
+function func_getUserHistory($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("select * from UserHistory where username = '$username' order by eventtime");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
 
+}
 /**
  * this is a helper function which returns
  * all the date specific stats about games

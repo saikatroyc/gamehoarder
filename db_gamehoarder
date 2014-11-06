@@ -118,7 +118,7 @@ CREATE TABLE `OwnsGames` (
 
 LOCK TABLES `OwnsGames` WRITE;
 /*!40000 ALTER TABLE `OwnsGames` DISABLE KEYS */;
-INSERT INTO `OwnsGames` VALUES ('root','187 Ride or Die',0,NULL,NULL,NULL),('root','Amazing Learning Games With Rayman',0,NULL,NULL,NULL),('root','Batman Vengeance',0,NULL,NULL,NULL),('root','Batman: Rise of Sin Tzu',0,NULL,NULL,NULL),('root','Beowulf: The Game',0,NULL,NULL,NULL),('root','Dead Angle',0,'2014-11-05',NULL,NULL),('root','Dead Ball Zone',0,'2014-11-05',NULL,NULL),('root','Dead Block',0,'2014-11-05',NULL,NULL),('root','Dead Connection',0,'2014-11-05',NULL,NULL),('root','Dead Dance',0,'2014-11-05',NULL,NULL),('saikat','Need for Speed - Special Edition',0,NULL,NULL,NULL),('saikat','Need for Speed II: Special Edition',0,NULL,NULL,NULL),('saikat','Need for Speed: Collection',0,NULL,NULL,NULL),('saikat','Need for Speed: High Stakes',0,NULL,NULL,NULL),('saikat','No Escape',0,NULL,NULL,NULL),('saikat','No Fate! Only the Power of Will',0,NULL,NULL,NULL),('saikat','No Fear Downhill Mountain Biking',0,NULL,NULL,NULL),('test','187 Ride or Die',0,NULL,NULL,NULL),('test','Amazing Learning Games With Rayman',0,NULL,NULL,NULL),('test','Batman: Rise of Sin Tzu',0,NULL,NULL,NULL),('test','Brothers in Arms: D-Day',0,NULL,NULL,NULL),('test','Far Cry',0,NULL,NULL,NULL),('test','Far Cry 2',0,NULL,NULL,NULL),('test','Far Cry 3',0,NULL,NULL,NULL),('test','Far Cry Instincts: Evolution',0,NULL,NULL,NULL),('test','Halo 2',0,NULL,NULL,NULL),('test','Halo 2 Multiplayer Map Pack',0,NULL,NULL,NULL),('test','Need for Speed: Hot Pursuit ',0,NULL,NULL,NULL),('test','Need for Speed: Special Edition',0,NULL,NULL,NULL),('test','Need for Speed: Underground',0,NULL,NULL,NULL),('test124','Need for Speed: Most Wanted 5-1-0',0,NULL,NULL,NULL),('test124','War of the Worlds',0,NULL,NULL,NULL),('test124','War of the Worlds 2011',0,NULL,NULL,NULL),('test124','War Pinball HD',0,NULL,NULL,NULL),('test124','War Room',0,NULL,NULL,NULL),('test124','War Thunder',0,NULL,NULL,NULL),('test124','War Wind',0,NULL,NULL,NULL);
+INSERT INTO `OwnsGames` VALUES ('root','Amazing Learning Games With Rayman',0,NULL,NULL,NULL),('root','Batman Vengeance',0,NULL,NULL,NULL),('root','Batman: Rise of Sin Tzu',0,NULL,NULL,NULL),('root','Beowulf: The Game',0,NULL,NULL,NULL),('root','Dead Angle',0,'2014-11-05',NULL,NULL),('root','Dead Ball Zone',0,'2014-11-05',NULL,NULL),('root','Dead Block',0,'2014-11-05',NULL,NULL),('root','Dead Connection',0,'2014-11-05',NULL,NULL),('root','Dead Dance',0,'2014-11-05',NULL,NULL),('saikat','Need for Speed - Special Edition',0,NULL,NULL,NULL),('saikat','Need for Speed II: Special Edition',0,NULL,NULL,NULL),('saikat','Need for Speed: Collection',0,NULL,NULL,NULL),('saikat','Need for Speed: High Stakes',0,NULL,NULL,NULL),('saikat','No Escape',0,NULL,NULL,NULL),('saikat','No Fate! Only the Power of Will',0,NULL,NULL,NULL),('saikat','No Fear Downhill Mountain Biking',0,NULL,NULL,NULL),('test','187 Ride or Die',0,NULL,NULL,NULL),('test','Amazing Learning Games With Rayman',0,NULL,NULL,NULL),('test','Batman: Rise of Sin Tzu',0,NULL,NULL,NULL),('test','Brothers in Arms: D-Day',0,NULL,NULL,NULL),('test','Far Cry',0,NULL,NULL,NULL),('test','Far Cry 2',0,NULL,NULL,NULL),('test','Far Cry 3',0,NULL,NULL,NULL),('test','Far Cry Instincts: Evolution',0,NULL,NULL,NULL),('test','Halo 2',0,NULL,NULL,NULL),('test','Halo 2 Multiplayer Map Pack',0,NULL,NULL,NULL),('test','Need for Speed: Hot Pursuit ',0,NULL,NULL,NULL),('test','Need for Speed: Special Edition',0,NULL,NULL,NULL),('test','Need for Speed: Underground',0,NULL,NULL,NULL),('test124','Need for Speed: Most Wanted 5-1-0',0,NULL,NULL,NULL),('test124','War of the Worlds',0,NULL,NULL,NULL),('test124','War of the Worlds 2011',0,NULL,NULL,NULL),('test124','War Pinball HD',0,NULL,NULL,NULL),('test124','War Room',0,NULL,NULL,NULL),('test124','War Thunder',0,NULL,NULL,NULL),('test124','War Wind',0,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `OwnsGames` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,6 +170,34 @@ LOCK TABLES `Publisher` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `UserHistory`
+--
+
+DROP TABLE IF EXISTS `UserHistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserHistory` (
+  `eventtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `username` varchar(10) NOT NULL,
+  `game` varchar(50) DEFAULT NULL,
+  `action` int(11) NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`eventtime`),
+  UNIQUE KEY `eventtime` (`eventtime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `UserHistory`
+--
+
+LOCK TABLES `UserHistory` WRITE;
+/*!40000 ALTER TABLE `UserHistory` DISABLE KEYS */;
+INSERT INTO `UserHistory` VALUES ('2014-11-02 00:02:00','root',NULL,3,'2014-11-05'),('2014-11-03 00:11:00','root','testgame',0,'2014-11-05'),('2014-11-04 00:00:00','root','testgame1',0,'2014-11-04'),('2014-11-04 00:09:00','root','testgame1',1,'2014-11-04'),('2014-11-05 00:07:00','root','testgame',1,'2014-11-05'),('2014-11-05 00:20:00','root','testgame',2,'2014-11-05');
+/*!40000 ALTER TABLE `UserHistory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -204,4 +232,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-05  2:12:49
+-- Dump completed on 2014-11-05 18:11:40
