@@ -21,6 +21,42 @@ if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
     func_delete_game_user($conn, $user_record);
     echo $user_record['game'];
 }
+
+/**
+ * helper function to add end date for a game
+ */
+function func_update_game_enddate($conn,$username, $game) {
+    // assoc array passed as input
+    if ($conn) {
+        try {
+            $enddate = date('Y-m-d');
+            $s = $conn->prepare("UPDATE OwnsGames SET enddate = '$enddate' WHERE username = '$username' AND game = '$game'");
+            $s->execute($user_record);
+        } catch (PDOException $e) {
+            echo "Could not insert to DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+}
+/**
+ * helper function to add start date for a game
+ */
+function func_update_game_startdate($conn,$username, $game) {
+    // assoc array passed as input
+    if ($conn) {
+        try {
+            $startdate = date('Y-m-d');
+            $s = $conn->prepare("UPDATE OwnsGames SET startdate = '$startdate' WHERE username = '$username' AND game = '$game'");
+            $s->execute($user_record);
+        } catch (PDOException $e) {
+            echo "Could not insert to DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+}
+
 /**
  * Function to insert entry into game-user relation
  *
