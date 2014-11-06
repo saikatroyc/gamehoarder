@@ -31,7 +31,7 @@ function func_update_game_enddate($conn,$username, $game) {
         try {
             $enddate = date('Y-m-d');
             $s = $conn->prepare("UPDATE OwnsGames SET enddate = '$enddate' WHERE username = '$username' AND game = '$game'");
-            $s->execute($user_record);
+            $s->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -48,7 +48,7 @@ function func_update_game_startdate($conn,$username, $game) {
         try {
             $startdate = date('Y-m-d');
             $s = $conn->prepare("UPDATE OwnsGames SET startdate = '$startdate' WHERE username = '$username' AND game = '$game'");
-            $s->execute($user_record);
+            $s->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -277,6 +277,10 @@ function func_insert_new_user($conn, $user_record) {
         try {
             $s = $conn->prepare("INSERT INTO users (username, password, email) value (:name, :pass, :email)");
             $s->execute($user_record);
+            $username = $user_record['name'];
+            $currdate = date('Y-m-d');
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, action, date) value (NOW(), '$username', 3, '$currdate')");
+            $s1->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
