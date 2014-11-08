@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 
 <html lang='en'>
@@ -45,7 +46,7 @@
         header("Location: register.php");
     } elseif (isset($_POST['login'])) {
         // insert code to check valid user
-        session_start();
+        //session_start();
         $username = $_POST['username'];
         $password = $_POST['password'];
         if ($username && $password) {
@@ -77,7 +78,7 @@
                     echo "<p><a href='index.php'>Click</a> to try again</p>";
                 } else {
                     // session user is set, retrieve this is member.php
-                    header("Location: home.php");
+                    //header("Location: home.php");
                 }
             }
             // once done close db

@@ -1,10 +1,11 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 
 <?php
-    session_start(); 
+    //session_start();
     if (isset($_SESSION['username'])) {
     } else {
-        header("Location: index.php");
+        //header("Location: index.php");
     }
 ?>
 <html lang='en'>
@@ -84,6 +85,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/contenthover.js"></script>
 </body>
+
 <?php
 if (isset($_POST['search']) || isset($_POST['dev'])) {
     $search = $_POST['search_input'];
@@ -118,6 +120,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
     }
 }
 ?>
+
 <script type="text/javascript">
     function insertGameUser(game,user) {
         // code for IE7+, Firefox, Chrome, Opera, Safari

@@ -2,7 +2,7 @@
 /*
  * this file contains all methods to access the gamehoarder db
  */
-session_start();
+//session_start();
 if(isset($_GET['insertuser']) && isset($_GET['insertgame'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['insertuser'];
@@ -232,15 +232,24 @@ function func_getGamesUser($conn, $username) {
  * Function to connect to a database
  *
  * @param
- * $dbname - name of database to connect to
+ * $db - name of database to connect to
  * @return
  * $conn - PDO associated with database
  */
-function func_connect_db($dbname) {
+function func_connect_db($db) {
     try {
-        $conn = new PDO("mysql:host=localhost;dbname=$dbname", "root", "root");
+		// set host, dbname, based on given input
+        if ($db == "gamehoarder") {
+            $host   = "engr-cpanel-mysql.engr.illinois.edu";
+            $dbname = "gamehoar_games";
+        }
+		
+		// user with access / modify privileges to database
+        $user = "gamehoar_db";
+        $pass = "gamehoarder411";
+        $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
         $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-        //echo "connected to db<br>";
+        ///echo "connected to db<br>";
     } catch (PDOException $e) {
         echo "Could not connect to DB.\n";
         echo "getMessage(): " . $e->getMessage () . "\n";
@@ -265,7 +274,7 @@ function func_is_user_exists($conn, $username) {
         goto end;
     }
     try {
-        $stmt = $conn->prepare('SELECT password FROM users WHERE username = :uname');
+        $stmt = $conn->prepare('SELECT password FROM Users WHERE username = :uname');
         $stmt->execute(array('uname' => $username));
         $result = $stmt->fetchAll();
         if (count($result)) {
@@ -286,7 +295,7 @@ function func_insert_new_user($conn, $user_record) {
     // assoc array passed as input
     if ($conn) {
         try {
-            $s = $conn->prepare("INSERT INTO users (username, password, email) value (:name, :pass, :email)");
+            $s = $conn->prepare("INSERT INTO Users (username, password, email) value (:name, :pass, :email)");
             $s->execute($user_record);
             $username = $user_record['name'];
             $currdate = date('Y-m-d');
@@ -326,7 +335,7 @@ function func_getUserCredential($conn, $username) {
     } else {
         try {
             // uname is a primary key, so atmost one row expected
-            $stmt = $conn->prepare("SELECT * FROM users WHERE username=:name");
+            $stmt = $conn->prepare("SELECT * FROM Users WHERE username=:name");
             $stmt->execute(array('name' => $username));
             $result = $stmt->fetchAll();
             foreach($result as $row) {
@@ -358,7 +367,7 @@ function func_changePassword($conn, $username, $newPassword) {
         return NULL;    
     } else {
         try {
-            $stmt = $conn->prepare("UPDATE users SET password='$newPassword' WHERE username='$username'");
+            $stmt = $conn->prepare("UPDATE Users SET password='$newPassword' WHERE username='$username'");
             $stmt->execute();
         } catch (PDOException $e) {
             echo "Could not change password.\n";
@@ -377,7 +386,7 @@ function func_getGames($conn, $search) {
         try {
             // uname is a primary key, so atmost one row expected
             $stmt = $conn->prepare("SELECT * FROM Games WHERE name LIKE ?");
-            $like="$search%";
+            $like="%$search%";
             $stmt->execute(array($like));
             $result = $stmt->fetchAll();
             $count=0;
