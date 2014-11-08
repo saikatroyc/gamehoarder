@@ -439,6 +439,37 @@ function func_getGamesByDev($conn, $search) {
     }
 }
 
+function func_getGameImage($conn, $search) {
+    //returns the url of the cover art image for the given game
+    //returns default thumbnail if image could not be retrieved
+    if ($conn == NULL) {
+        return "images/thumb.jpg";
+    } else {
+        try {
+            //echo "SELECT wiki_img FROM GamesMeta WHERE game = '$search'";
+            //return "images/thumb.jpg";
+            $search = addslashes($search);
+            $stmt = $conn->prepare("SELECT wiki_img FROM GamesMeta WHERE game = '$search'");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            if (sizeof($result) > 0) {
+                if (!($result[0][0] == "null")) {
+                    return $result[0][0];
+                } else {
+                    return "images/thumb.jpg";
+                }
+            } else {
+                return "images/thumb.jpg";
+            }
+        } catch (PDOException $e) {
+            echo "Could not connect to DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+        return "images/thumb.jpg";
+    }
+}
+
 /*
 * Helper method for populating DB
 * This prepare statement, once created, 

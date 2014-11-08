@@ -103,10 +103,10 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
     if ($numrows > 0) {
         echo "<div class=\"container\">
         <div class=\"row\">";
-        for ($i = 0;$i < $numrows;$i++) { 
+        for ($i = 0;$i < $numrows;$i++) {
             echo"
                 <div class=\"container thumbnail col-md-3\" >
-                <img src=\"images/thumb.jpg\" width=\"300\" height=\"240\"/>
+                <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
                     <div class=\"caption\">
                         <h5><strong>". $game_list[$i]['name'] . "</strong></h5><p>Rating: " . $game_list[$i]['rating'] . "</p>
                         <p>Year: " . $game_list[$i]['year'] . "</p>
