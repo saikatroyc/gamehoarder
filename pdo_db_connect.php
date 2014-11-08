@@ -239,15 +239,18 @@ function func_getGamesUser($conn, $username) {
 function func_connect_db($db) {
     try {
 		// set host, dbname, based on given input
-        if ($db == "gamehoarder") {
+        if ($db == "gamehoar_games") {
             $host   = "engr-cpanel-mysql.engr.illinois.edu";
-            $dbname = "gamehoar_games";
+            $user = "gamehoar_db";
+            $pass = "gamehoarder411";
+        } else {
+            $user = "root";
+            $pass = "root";
+            $host = "localhost";
         }
 		
 		// user with access / modify privileges to database
-        $user = "gamehoar_db";
-        $pass = "gamehoarder411";
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+        $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
         $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         ///echo "connected to db<br>";
     } catch (PDOException $e) {
