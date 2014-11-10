@@ -45,7 +45,7 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Home</a></li>
           <li><a href="graphs.php" id="graphs">TrackUrGames</a></li>
-          <li><a href="#Lucky" id="recommend">Recommendations</a></li>
+          <li><a href="recommendations.php" id="recommend">Recommendations</a></li>
           <li><a href="search.php">Search</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
