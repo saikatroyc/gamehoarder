@@ -5,3 +5,5 @@ Notes:
 
 2. user registration, adding, deleting a game from repo now logged in
 timeline.
+
+3.created developer branch
