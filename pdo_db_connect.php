@@ -139,32 +139,35 @@ function func_getRecommendations($conn, $username, $count) {
         try {
             // 
             $stmt = $conn->prepare("SELECT Pop.name as game, (Gen.gencount + Pop.usercount) as score
+                FROM
+                (SELECT Games.genre as genre, COUNT(Games.name) as gencount
+                FROM OwnsGames, Games
+                WHERE OwnsGames.username = '$username' AND OwnsGames.game = Games.name
+                GROUP BY genre) as Gen,
 
-FROM
-(SELECT Games.genre as genre, COUNT(Games.name) as gencount
-FROM OwnsGames, Games
-WHERE OwnsGames.username = '$username' AND OwnsGames.game = Games.name
-GROUP BY genre) as Gen,
-
-(SELECT OwnsGames.game as name, Games.genre as genre, COUNT(*) as usercount
-FROM OwnsGames, Games
-WHERE OwnsGames.game = Games.name
-GROUP BY OwnsGames.game) as Pop
-
-WHERE Gen.genre = Pop.genre
-
-ORDER BY score desc
-
-LIMIT $count");
+                (SELECT OwnsGames.game as name, Games.genre as genre, COUNT(*) as usercount
+                FROM OwnsGames, Games
+                WHERE OwnsGames.game = Games.name
+                GROUP BY OwnsGames.game) as Pop
+                
+                WHERE Gen.genre = Pop.genre AND Pop.name NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username')
+                ORDER BY score desc
+                LIMIT $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['name'] = $row['game'];
+                $op[$count]['score'] = $row['score'];
+                $count+=1;
+            }
         } catch (PDOException $e) {
             echo "Could not select record from DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
             $conn = NULL;
         }
     }
-    return $result;
+    return $op;
 
 }
 

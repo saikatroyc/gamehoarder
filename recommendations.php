@@ -23,6 +23,8 @@
     <link href="css/carousel.css" rel="stylesheet">
     <link href="css/mystyle.css" rel="stylesheet">
     <link href="css/sidebar.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="all" href="css/bootstrap-glyphicons.css">
+  <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
   </head>
 <!-- NAVBAR
 ================================================== -->
@@ -45,8 +47,8 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="home.php">Home</a></li>
-          <li><a href="graphs.php" id="graphs">TrackUrGames</a></li>
-          <li class="active"><a href="recommendations.php" id="recommend">Recommendations</a></li>
+          <li><a href="#" id="graphs">TrackUrGames</a></li>
+          <li class="active"><a href="#" id="recommend">Recommendations</a></li>
           <li><a href="search.php">Search</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -72,14 +74,52 @@
                         Recommendation options
                     </a>
                 </li>
-                <li>
-                    <a href="#">[Options]</a>
+                <li class="active">
+                    <a href="#">By Your Most Popular Genre</a>
+                </li>
+                <li class="active">
+                    <a href="#">Trending</a>
                 </li>
             </ul>
         </div>
         </div><!-- end col-->
         
-
+        <div class="col-lg-8">
+        <div id="page-content-wrapper" style="padding-left: 0px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1><p>recommendations</p></h1>
+<!-- commenet dynamically create the php page here -->
+<!-- get user history-->
+                    <?php
+                        require 'pdo_db_connect.php';
+                        $conn = func_connect_db("gamehoarder");
+                        $username=$_SESSION['username'];
+                        $game_list=func_getRecommendations($conn, $username, 10);
+                        $numrows = count($game_list);
+                        if ($numrows > 0) {
+                        echo "<div class=\"container\">
+                        <div class=\"row\">";
+                        for ($i = 0;$i < $numrows;$i++) {
+                        echo"
+<div class=\"container thumbnail col-lg-3\" >
+    <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
+    <div class=\"caption\">
+    <h5><strong>". $game_list[$i]['name'] . "</strong></h5> 
+    <h5><strong>score : ". $game_list[$i]['score'] . "</strong></h5> 
+    <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
+    </div>
+</div>";
+        }   
+        echo"</div></div>";
+    }
+                    ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div><!--end col-->
         </div><!--end row-->
 
 
@@ -88,37 +128,7 @@
 
       </div> <!-- end container-->
     </div>
-<div class="container">
-    <div class="page-header">
-        <div class="clearfix">
-            <div class="col-md-12 col-sm-6 col-xs-12 text-center">
-                <h1>Recommended games<br></h1>
-            </div>
-        </div>
-    </div>
-</div> <!--end container-->
-<?php
-require 'pdo_db_connect.php';
-$conn = func_connect_db("gamehoarder");
-$username=$_SESSION['username'];
-$game_list=func_getRecommendations($conn, $username, 10);
-$numrows = count($game_list);
-if ($numrows > 0) {
-    echo "<div class=\"container\">";
-    for ($i = 0;$i < $numrows;$i++) { 
-        echo"<div id=\"gamerow". $i."\" class=\"row\">".
-            "<div class=\"col-md-6\" >
-                <h5>" . $game_list[$i]['game'] . "</h5>
-            </div>
-            <div class=\"col-md-6\" >
-                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a></p>
-            </div></div>"; 
-    }
-    echo"</div>";
-} else {
-    echo "Failed to get recommendations";
-}
-?>    
+
 
       <!-- FOOTER -->
       <div class="footer navbar-fixed-bottom">
@@ -160,9 +170,18 @@ if ($numrows > 0) {
         document.getElementById("info").innerHTML="TBD://game recommendations";
     }
     </script>
-    <script>
+    <script type="text/javascript">
+    function insertGameUser(game,user) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlhttp=new XMLHttpRequest();
+        var str = "insertuser=" + encodeURIComponent(user) + 
+        "&insertgame=" + encodeURIComponent(game);
+        str = "pdo_db_connect.php?" + str;
+        alert(game+" added to collection");
+        xmlhttp.open("GET",str,true);
+        xmlhttp.send();
+    }
     </script>
-<?php //echo "hello ". $_SESSION['username'];?>
   </body>
 </html>
 
