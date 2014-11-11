@@ -74,10 +74,10 @@
                         Recommendation options
                     </a>
                 </li>
-                <li class="active">
-                    <a href="#">By Your Most Popular Genre</a>
+                <li>
+                    <a href="recommendations.php">By Your Most Popular Genre</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="#">Trending</a>
                 </li>
             </ul>
