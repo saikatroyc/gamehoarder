@@ -113,22 +113,67 @@ function func_delete_game_user($conn, $user_record) {
  * this is a helper fucntion that returns the top most trending
  * games, based on number of users who have the game in their repo
  */
-function func_getTopGamesByUsers($conn, $count) {
+function func_getTopGamesByUsers($conn, $username, $count) {
     // assoc array passed as input
     $result=NULL;
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("select game, count(*) as usercount from OwnsGames group by game order by usercount desc limit $count");
+            $stmt = $conn->prepare("select game, count(*) as usercount from OwnsGames where game not in (select game from OwnsGames where username = '$username') group by game order by usercount desc limit $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['name'] = $row[0];
+                $op[$count]['count'] = $row[1];
+                $count+=1;
+            }
         } catch (PDOException $e) {
             echo "Could not select record from DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
             $conn = NULL;
         }
     }
-    return $result;
+    return $op;
+
+}
+
+function func_getRecommendations($conn, $username, $count) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // 
+            $stmt = $conn->prepare("SELECT Pop.name as game, (Gen.gencount + Pop.usercount) as score
+                FROM
+                (SELECT Games.genre as genre, COUNT(Games.name) as gencount
+                FROM OwnsGames, Games
+                WHERE OwnsGames.username = '$username' AND OwnsGames.game = Games.name
+                GROUP BY genre) as Gen,
+
+                (SELECT OwnsGames.game as name, Games.genre as genre, COUNT(*) as usercount
+                FROM OwnsGames, Games
+                WHERE OwnsGames.game = Games.name
+                GROUP BY OwnsGames.game) as Pop
+                
+                WHERE Gen.genre = Pop.genre AND Pop.name NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username')
+                ORDER BY score desc
+                LIMIT $count");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['name'] = $row['game'];
+                $op[$count]['score'] = $row['score'];
+                $count+=1;
+            }
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $op;
 
 }
 
@@ -239,15 +284,18 @@ function func_getGamesUser($conn, $username) {
 function func_connect_db($db) {
     try {
 		// set host, dbname, based on given input
-        if ($db == "gamehoarder") {
+        if ($db == "gamehoar_games") {
             $host   = "engr-cpanel-mysql.engr.illinois.edu";
-            $dbname = "gamehoar_games";
+            $user = "gamehoar_db";
+            $pass = "gamehoarder411";
+        } else {
+            $user = "root";
+            $pass = "root";
+            $host = "localhost";
         }
 		
 		// user with access / modify privileges to database
-        $user = "gamehoar_db";
-        $pass = "gamehoarder411";
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+        $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
         $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         ///echo "connected to db<br>";
     } catch (PDOException $e) {
@@ -542,5 +590,4 @@ function func_preparePublisherPDO($conn, $flag) {
     }
     return $s; 
 }
-func_preparePublisherPDO
 ?>

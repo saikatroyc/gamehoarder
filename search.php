@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 
 <?php
-    //session_start();
     if (isset($_SESSION['username'])) {
     } else {
-        //header("Location: index.php");
+        header("Location: index.php");
     }
 ?>
 <html lang='en'>
@@ -42,7 +41,7 @@
         <ul class="nav navbar-nav">
           <li><a href="home.php">Home</a></li>
           <li><a href="graphs.php" id="graphs">TrackUrGames</a></li>
-          <li><a href="#Lucky" id="recommend">Recommendations</a></li>
+          <li><a href="recommendations.php" id="recommend">Recommendations</a></li>
           <li class="active"><a href="#">Search</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
