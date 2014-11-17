@@ -590,4 +590,17 @@ function func_preparePublisherPDO($conn, $flag) {
     }
     return $s; 
 }
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
+function func_preparePublishesPDO($conn, $flag) {
+    if (strcmp($flag, "INSERT") == 0) {
+        echo "prep";
+        $s = $conn->prepare("INSERT INTO Publishes (publisher, game) value (:PUB, :GAME)");
+    } else if (strcmp($flag, "UPDATE") == 0) {
+    }
+    return $s; 
+}
 ?>
