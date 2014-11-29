@@ -35,6 +35,7 @@ end:
 <head>
     <meta charset="UTF-8" /> 
     <title>Register</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">    
     <link rel="stylesheet" type="text/css" href="css/mystyle.css" />
 </head>
 <body>
@@ -54,6 +55,7 @@ end:
 		</div>
 
 		<div class="footer">
+		<a href='login.php' id="myButton1" class="btn btn-default" style="width:100px;">Go to Login <br> Page</a>  
 		<input type="submit" name="submit" value="Register" class="register" />
 		</div>
 	</form>

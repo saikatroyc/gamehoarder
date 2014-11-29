@@ -2,7 +2,10 @@
 /*
  * this file contains all methods to access the gamehoarder db
  */
-//session_start();
+
+/*
+* Code for inserting an entry into game-user relation.
+*/
 if(isset($_GET['insertuser']) && isset($_GET['insertgame'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['insertuser'];
@@ -19,6 +22,29 @@ if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
     $user_record['name'] = $_GET['deleteuser'];
     $user_record['game'] = $_GET['deletegame'];
     func_delete_game_user($conn, $user_record);
+    echo $user_record['game'];
+}
+
+/*
+* Code for rating a game.
+*/
+if(isset($_GET['rateuser']) && isset($_GET['rategame']) && isset($_GET['raterating'])) {
+    $conn = func_connect_db("gamehoarder");
+    $user_record['name'] = $_GET['rateuser'];
+    $user_record['game'] = $_GET['rategame'];
+    $user_record['rating'] = $_GET['raterating'];
+    func_rate_game_user($conn, $user_record);
+    echo $user_record['game'];
+}
+
+/*
+* Code for undoing game rating.
+*/
+if(isset($_GET['unrateuser']) && isset($_GET['unrategame'])) {
+    $conn = func_connect_db("gamehoarder");
+    $user_record['name'] = $_GET['unrateuser'];
+    $user_record['game'] = $_GET['unrategame'];
+    func_unrate_game_user($conn, $user_record);
     echo $user_record['game'];
 }
 
@@ -84,7 +110,7 @@ function func_insert_game_user($conn, $user_record) {
 }
 
 /*
-* Function to insert entry into game-user relation
+* Function to delete entry from game-user relation
 *
 * @param
 * $conn - PHP Connection Object for current DB
@@ -109,6 +135,77 @@ function func_delete_game_user($conn, $user_record) {
     }
 }
 
+/*
+* Function to rate game
+*
+* @param
+* $conn - PHP Connection Object for current DB
+* $user_record - user record containing the username, game, and rating of the entry to update
+*/
+function func_rate_game_user($conn, $user_record) {
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=:rating WHERE username=:name AND game=:game");
+            $stmt->execute($user_record);
+            $username = $user_record['name'];
+            $currdate = date('Y-m-d');
+            $game = $user_record['game'];
+            // log delete event in UserHistory
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 5, '$currdate')");
+            $s1->execute();
+        } catch (PDOException $e) {
+            echo "Could not update record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+}
+
+/*
+* Function to unrate game
+*
+* @param
+* $conn - PHP Connection Object for current DB
+* $user_record - user record containing the username and game of the entry to update
+*/
+function func_unrate_game_user($conn, $user_record) {
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=NULL WHERE username=:name AND game=:game");
+            $stmt->execute($user_record);
+        } catch (PDOException $e) {
+            echo "Could not update record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+}
+
+/**
+ * this is a helper fucntion that returns the rating of a game
+ * as an aggregate of all the ratings in OwnsGames
+ */
+function func_getGameRating($conn, $game) {
+    // assoc array passed as input
+    $result=NULL;
+    $op=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT AVG(rating) FROM OwnsGames WHERE game=\"$game\"");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $op=$result[0][0];
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $op;
+
+}
+
 /**
  * this is a helper fucntion that returns the top most trending
  * games, based on number of users who have the game in their repo
@@ -116,10 +213,11 @@ function func_delete_game_user($conn, $user_record) {
 function func_getTopGamesByUsers($conn, $username, $count) {
     // assoc array passed as input
     $result=NULL;
+    $op=NULL;
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("select game, count(*) as usercount from OwnsGames where game not in (select game from OwnsGames where username = '$username') group by game order by usercount desc limit $count");
+            $stmt = $conn->prepare("SELECT game, COUNT(*) AS usercount FROM OwnsGames WHERE game NOT IN (SELECT game FROM OwnsGames WHERE username = '$username') GROUP BY game ORDER BY usercount DESC LIMIT $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count=0;
@@ -138,26 +236,60 @@ function func_getTopGamesByUsers($conn, $username, $count) {
 
 }
 
+/**
+ * this is a helper fucntion that returns the top most trending
+ * games, based on number of users who have the game in their repo
+ */
+function func_getTopGamesByUsersPlatform($conn, $username, $count) {
+    // assoc array passed as input
+    $result=NULL;
+    $op=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT game, COUNT(*) AS usercount FROM OwnsGames WHERE game NOT IN (SELECT game FROM OwnsGames WHERE username = '$username') GROUP BY game ORDER BY usercount DESC LIMIT $count");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['name'] = $row[0];
+                $op[$count]['count'] = $row[1];
+                $count+=1;
+            }
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $op;
+
+}
+
+/**
+ * this is a function to return recommendations
+ */
 function func_getRecommendations($conn, $username, $count) {
     // assoc array passed as input
     $result=NULL;
+    $op=NULL;
     if ($conn) {
         try {
             // 
-            $stmt = $conn->prepare("SELECT Pop.name as game, (Gen.gencount + Pop.usercount) as score
+            $stmt = $conn->prepare("SELECT Pop.name AS game, (Gen.gencount + Pop.usercount) AS score
                 FROM
-                (SELECT Games.genre as genre, COUNT(Games.name) as gencount
+                (SELECT Games.genre AS genre, COUNT(Games.name) AS gencount
                 FROM OwnsGames, Games
                 WHERE OwnsGames.username = '$username' AND OwnsGames.game = Games.name
-                GROUP BY genre) as Gen,
+                GROUP BY genre) AS Gen,
 
-                (SELECT OwnsGames.game as name, Games.genre as genre, COUNT(*) as usercount
+                (SELECT OwnsGames.game AS name, Games.genre AS genre, COUNT(*) AS usercount
                 FROM OwnsGames, Games
                 WHERE OwnsGames.game = Games.name
-                GROUP BY OwnsGames.game) as Pop
+                GROUP BY OwnsGames.game) AS Pop
                 
                 WHERE Gen.genre = Pop.genre AND Pop.name NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username')
-                ORDER BY score desc
+                ORDER BY score DESC
                 LIMIT $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
@@ -208,7 +340,7 @@ function func_getUserHistory($conn, $username) {
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("select * from UserHistory where username = '$username' order by eventtime");
+            $stmt = $conn->prepare("SELECT * FROM UserHistory WHERE username = '$username' ORDER BY eventtime");
             $stmt->execute();
             $result=$stmt->fetchAll();
         } catch (PDOException $e) {
@@ -218,8 +350,155 @@ function func_getUserHistory($conn, $username) {
         }
     }
     return $result;
-
 }
+
+/**
+ * Get user game count
+ */
+function func_getUserGameCount($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM OwnsGames WHERE username = '$username'");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user platform count
+ */
+function func_getUserPlatformCount($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM (SELECT DISTINCT platform FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$username') AS platforms");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user genre count
+ */
+function func_getUserGenreCount($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM (SELECT DISTINCT genre FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$username') AS genres");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user platform count
+ */
+function func_getUserPlatformMax($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT platform, COUNT(*) AS platcount FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$username' GROUP BY platform ORDER BY platcount DESC LIMIT 1");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user platform count
+ */
+function func_getUserDeveloperMax($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT developer, COUNT(*) AS devcount FROM OwnsGames JOIN Develops ON OwnsGames.game=Develops.game WHERE username = '$username' GROUP BY developer ORDER BY devcount DESC LIMIT 1");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user platform count
+ */
+function func_getUserFirstGame($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT game FROM OwnsGames WHERE username = '$username' ORDER BY adddate ASC LIMIT 1");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Get user platform count
+ */
+function func_getUserLongestGame($conn, $username) {
+    // assoc array passed as input
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("SELECT game, DATEDIFF(startdate,enddate) as length FROM OwnsGames WHERE username = '$username' ORDER BY length DESC LIMIT 1");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $result;
+}
+
 /**
  * this is a helper function which returns
  * all the date specific stats about games
@@ -258,19 +537,26 @@ function func_getGamesDateStats($conn, $username) {
 */
 function func_getGamesUser($conn, $username) {
     // assoc array passed as input
-    $result=NULL;
+    $op=NULL;
     if ($conn) {
         try {
-            $stmt = $conn->prepare("SELECT game FROM OwnsGames WHERE username='$username'");
+            $stmt = $conn->prepare("SELECT OwnsGames.game, Games.platform, OwnsGames.rating FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE OwnsGames.username='$username'");
             $stmt->execute();
             $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['game']=$row[0];
+                $op[$count]['platform']=$row[1];      
+                $op[$count]['rating']=$row[2];      
+                $count++;                
+            }
         } catch (PDOException $e) {
             echo "Could not select record from DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
             $conn = NULL;
         }
     }
-    return $result;
+    return $op;
 }
 
 /**
@@ -440,10 +726,10 @@ function func_getGames($conn, $search) {
             $count=0;
             foreach($result as $row) {
                 $op[$count]['name'] = $row[0];
-                $op[$count]['rating'] = $row[1];
-                $op[$count]['genre'] = $row[2];
-                $op[$count]['year'] = $row[3];
-                $count+=1;
+                $op[$count]['genre'] = $row[1];
+                $op[$count]['year'] = $row[2];
+                $op[$count]['platform'] = $row[3];
+                $count++;
             }
         } catch (PDOException $e) {
             echo "Could not connect to DB.\n";
@@ -465,16 +751,16 @@ function func_getGamesByDev($conn, $search) {
     } else {
         try {
             // uname is a primary key, so atmost one row expected
-            $stmt = $conn->prepare("select Games.name, Games.rating, Games.genre, Games.year from Develops,Games where Games.name = Develops.game and Develops.developer like ?");
+            $stmt = $conn->prepare("SELECT Games.name, Games.rating, Games.genre, Games.year FROM Develops,Games WHERE Games.name = Develops.game AND Develops.developer LIKE ?");
             $like="$search%";
             $stmt->execute(array($like));
             $result = $stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
                 $op[$count]['name'] = $row[0];
-                $op[$count]['rating'] = $row[1];
-                $op[$count]['genre'] = $row[2];
-                $op[$count]['year'] = $row[3];
+                $op[$count]['genre'] = $row[1];
+                $op[$count]['year'] = $row[2];
+                $op[$count]['platform'] = $row[3];
                 $count+=1;
             }
         } catch (PDOException $e) {
@@ -526,7 +812,8 @@ function func_getGameImage($conn, $search) {
 function func_prepareGamesPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
-        $s = $conn->prepare("INSERT INTO Games (name, rating, genre, year) value (:NAME, :RATING, :GENRE, :YEAR)");
+//        $s = $conn->prepare("INSERT INTO Games (name, rating, genre, year, platform) value (:NAME, :RATING, :GENRE, :YEAR, :PLATFORM)");
+        $s = $conn->prepare("INSERT INTO Games (name, genre, year, platform) value (:NAME, :GENRE, :YEAR, :PLATFORM)");
     } else if (strcmp($flag, "UPDATE") == 0) {
     }
     return $s; 
@@ -572,6 +859,33 @@ function func_prepareDevelopsPDO($conn, $flag) {
     if (strcmp($flag, "INSERT") == 0) {
         echo "prep";
         $s = $conn->prepare("INSERT INTO Develops (developer, game) value (:DEV, :GAME)");
+    } else if (strcmp($flag, "UPDATE") == 0) {
+    }
+    return $s; 
+}
+
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
+function func_preparePublisherPDO($conn, $flag) {
+    if (strcmp($flag, "INSERT") == 0) {
+        echo "prep";
+        $s = $conn->prepare("INSERT INTO Publishers (name, country) value (:NAME, :COUNTRY)");
+    } else if (strcmp($flag, "UPDATE") == 0) {
+    }
+    return $s; 
+}
+/*
+* Helper method for populating DB
+* This prepare statement, once created, 
+* can be used multiple times
+*/
+function func_preparePublishesPDO($conn, $flag) {
+    if (strcmp($flag, "INSERT") == 0) {
+        echo "prep";
+        $s = $conn->prepare("INSERT INTO Publishes (publisher, game) value (:PUB, :GAME)");
     } else if (strcmp($flag, "UPDATE") == 0) {
     }
     return $s; 

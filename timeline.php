@@ -79,10 +79,10 @@
                     <a href="#">Timeline</a>
                 </li>
                 <li>
-                    <a href="#">Tables</a>
+                    <a href="generalstats.php">General Stats</a>
                 </li>
                 <li>
-                    <a href="#">Games In Progress</a>
+                    <a href="#">Games in Progress</a>
                 </li>
                 <li>
                     <a href="#">Games Complete</a>
@@ -96,7 +96,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1><p>timeline</p></h1>
+                        <h1><p>Timeline</p></h1>
 <!-- commenet dynamically create the php page here -->
 <!-- get user history-->
    <?php
@@ -130,7 +130,7 @@
                             <div class="tl-circ"></div>
                             <div class="timeline-panel">
                             <div class="tl-heading">
-                                <h4>Game Added to collection!</h4>
+                                <h4>Game added to collection!</h4>
                                 <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
                             </div>
                             <div class="tl-body">
@@ -146,7 +146,7 @@
                             <div class="tl-circ"></div>
                             <div class="timeline-panel">
                             <div class="tl-heading">
-                                <h4>You started a Game!</h4>
+                                <h4>You started a new game!</h4>
                                 <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
                             </div>
                             <div class="tl-body">
@@ -162,7 +162,7 @@
                             <div class="tl-circ"></div>
                             <div class="timeline-panel">
                             <div class="tl-heading">
-                                <h4>Congrats on finishing game!</h4>
+                                <h4>Congrats on game completion!</h4>
                                 <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
                             </div>
                             <div class="tl-body">
@@ -178,11 +178,27 @@
                             <div class="tl-circ"></div>
                             <div class="timeline-panel">
                             <div class="tl-heading">
-                                <h4>Deleted a Game!</h4>
+                                <h4>Deleted a game!</h4>
                                 <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
                             </div>
                             <div class="tl-body">
-                                <p>Deleted <strong>'. $row['game'] . '</strong> from repo!!!</p>
+                                <p>Deleted <strong>'. $row['game'] . '</strong> from collection!</p>
+                            </div>
+                            </div>
+                            </li>';
+                            break;
+                        case 5:
+                            // user rated a game
+                            $str .=
+                            '<li '. $direction .'>
+                            <div class="tl-circ"></div>
+                            <div class="timeline-panel">
+                            <div class="tl-heading">
+                                <h4>Rated a game!</h4>
+                                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>'.$row['date'].'</small></p>
+                            </div>
+                            <div class="tl-body">
+                                <p>Rated <strong>'. $row['game'] . '</strong>!</p>
                             </div>
                             </div>
                             </li>';
@@ -195,7 +211,7 @@
                 //once string created echo it here!
                 echo $str;
             } else {
-                echo "<h1>its lonely in here!</h1>";
+                echo "<h1>It's lonely in here...</h1>";
             } 
         }     
     }
@@ -219,8 +235,7 @@
 
       <!-- FOOTER -->
       <div class="footer navbar-fixed-bottom">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="privacy.php">Privacy</a> &middot; <a href="terms.php">Terms</a> &middot; <a href="#">Back to top</a></p>
       </div>
 
 

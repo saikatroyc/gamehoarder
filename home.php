@@ -81,14 +81,48 @@ $game_list=func_getGamesUser($conn, $username);
 $numrows = count($game_list);
 if ($numrows > 0) {
     echo "<div class=\"container\">";
+    $i=0;
+    echo"<div id=\"gamerow". $i."\" class=\"row\">".
+        "<div class=\"col-md-3\" >
+            <h3>Game</h3>
+        </div>
+        <div class=\"col-md-3\" >
+            <h3>Platform</h3>
+        </div>
+        <div class=\"col-md-3\" >
+        </div></div>"; 
     for ($i = 0;$i < $numrows;$i++) { 
         echo"<div id=\"gamerow". $i."\" class=\"row\">".
-            "<div class=\"col-md-6\" >
+            "<div class=\"col-md-3\" >
                 <h5>" . $game_list[$i]['game'] . "</h5>
             </div>
-            <div class=\"col-md-6\" >
-                <p><a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a></p>
-            </div></div>"; 
+            <div class=\"col-md-3\" >
+                <h5>" . $game_list[$i]['platform'] . "</h5>
+            </div>
+            <div class=\"col-md-3\" >
+                <p>
+                    <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"startGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Start</a>
+                    <!--a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"completeGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Complete</a-->
+                    <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a>
+                </p>
+            </div>";
+            if($game_list[$i]['rating']==NULL)
+            {
+                echo"<div class=\"col-md-3\" >
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 1)\">1</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 2)\">2</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 3)\">3</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 4)\">4</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 5)\">5</a>
+                </div></div>"; 
+            }
+            else
+            {
+                echo"<div class=\"col-md-3\" >
+                        Rating: ".$game_list[$i]['rating']."
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteRateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Cancel</a>
+                </div></div>";             
+            }
     }
     echo"</div>";
 } else {
@@ -98,8 +132,7 @@ if ($numrows > 0) {
 
       <!-- FOOTER -->
       <div class="footer navbar-fixed-bottom">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Back to top</a></p>
       </div>
 
 
@@ -143,6 +176,91 @@ if ($numrows > 0) {
             xmlHttp=new XMLHttpRequest();
             var str = "deleteuser=" + encodeURIComponent(user) + 
             "&deletegame=" + encodeURIComponent(game);
+            str = "pdo_db_connect.php?" + str;
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }
+    }
+    function startGameUser(game,user,id) {
+    }
+    function rateGameUser(game,user,id,rating) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "rateuser=" + encodeURIComponent(user) + 
+            "&rategame=" + encodeURIComponent(game) +
+            "&raterating=" + encodeURIComponent(rating);
+            str = "pdo_db_connect.php?" + str;
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }
+    }
+    function deleteRateGameUser(game,user,id) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "unrateuser=" + encodeURIComponent(user) + 
+            "&unrategame=" + encodeURIComponent(game);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   

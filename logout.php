@@ -15,7 +15,7 @@
     if (isset($_SESSION['username'])) {
         session_destroy();
         echo "<h4>session stopped at: ". date('l'). date('H:i'). "hrs</h4>";
-        echo "<p>You have been logged out. <br>". "<a href='index.php'>Click here</a> to login</p>";
+        echo "<p>You have been logged out. <br>". "<a href='login.php'>Click here</a> to login. <br> <a href='index.php'>Click here</a> to go to main page. </p>";
     } else {
         header("Location: index.php");
     }

@@ -38,9 +38,15 @@
       <input type="submit" name="change_password" value="Change Password" class="btn btn-default" />
     </form>
     
-    <a href="home.php">Click here</a> to go back.
+    <a href="home.php">Click here</a> to go back to the home page.
 
 </div>
+
+      <!-- FOOTER -->
+      <div class="footer navbar-fixed-bottom">
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="privacy.php">Privacy</a> &middot; <a href="terms.php">Terms</a> &middot; <a href="#">Back to top</a></p>
+      </div>
+
 <!-- javascript -->
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

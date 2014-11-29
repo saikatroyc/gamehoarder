@@ -89,7 +89,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1><p>recommendations</p></h1>
+                        <h1><p>Recommendations</p></h1>
 <!-- commenet dynamically create the php page here -->
 <!-- get user history-->
                     <?php

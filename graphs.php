@@ -76,10 +76,10 @@
                     <a href="timeline.php">Timeline</a>
                 </li>
                 <li>
-                    <a href="#">Tables</a>
+                    <a href="generalstats.php">General Stats</a>
                 </li>
                 <li>
-                    <a href="#">Games In Progress</a>
+                    <a href="#">Games in Progress</a>
                 </li>
                 <li>
                     <a href="#">Games Complete</a>
@@ -93,7 +93,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1><p>Click on Side menu to get personalized tracker for your games</p></h1>
+                        <h1><p>Click on the side menu to get personalized tracker for your games</p></h1>
                     </div>
                 </div>
             </div>
@@ -113,8 +113,7 @@
 
       <!-- FOOTER -->
       <div class="footer navbar-fixed-bottom">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="privacy.php">Privacy</a> &middot; <a href="terms.php">Terms</a> &middot; <a href="#">Back to top</a></p>
       </div>
 
 

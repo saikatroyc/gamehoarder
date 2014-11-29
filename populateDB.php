@@ -1,5 +1,4 @@
 <?php
-
     /**
     *Format (tab separated): 
     Name	Year	Genre	Developer_name	Publisher_name	Systems	Regions	Rating
@@ -43,15 +42,17 @@
                 $assoc_line = explode("\t", $line);
                 if (count($assoc_line) == $TOTAL_COLS) {
                     $input['NAME'] = $assoc_line[$GAMENAME];
-                    $input['RATING'] = (empty($assoc_line[$RATING])) ? NULL : $assoc_line[$RATING];
+//                    $input['RATING'] = -1/*(empty($assoc_line[$RATING])) ? NULL : $assoc_line[$RATING]*/;
                     $input['GENRE'] = (empty($assoc_line[$GENRE])) ? NULL : $assoc_line[$GENRE];
+                    $input['PLATFORM'] = (empty($assoc_line[$SYS])) ? NULL : $assoc_line[$SYS];
                     // insert rows with valid number of columns
                     if (is_numeric($assoc_line[$YEAR]) == false) {
                         $int = filter_var($assoc_line[1], FILTER_SANITIZE_NUMBER_INT);
                         //echo $assoc_line[1] . "----------";
                         //echo "year ". $int . "</br>";
                         //TBD: extract the first year
-                        $input['YEAR'] = NULL;
+                        /*$input['YEAR'] = NULL;*/
+                        $input['YEAR'] = -1;
                     } else {
                         $input['YEAR'] = $assoc_line[$YEAR];
                     }

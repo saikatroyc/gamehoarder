@@ -36,7 +36,9 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">AboutUs</a></li>
+          <li class="active"><a href="#">About Us</a></li>
+          <li class="active"><a href="privacy.php">Privacy</a></li>
+          <li class="active"><a href="terms.php">Terms</a></li>
         </ul>
         </div><!-- /.navbar-collapse -->
         </div>
@@ -58,9 +60,9 @@
           <img src="images/back.jpg" alt="">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Welcome to Gamehoarder!!</h1>
-              <p>Your onestop store for game collections</p>
-              <p><a class="btn btn-lg btn-primary" href="login.php" role="button">GetStarted</a></p>
+              <h1>Welcome to GameHoarder!!</h1>
+              <p>A personalized application for managing your game collection</p>
+              <p><a class="btn btn-lg btn-primary" href="login.php" role="button">Get Started</a></p>
             </div>
           </div>
         </div>
@@ -69,8 +71,8 @@
           <div class="container">
             <div class="carousel-caption">
               <h1>Track your games</h1>
-              <p>Keep track of all your games collection. Get interactive visualization of your games</p>
-              <p><a class="btn btn-lg btn-primary" href="#feat1" role="button">Learn more</a></p>
+              <p>Keep track of your entire game collection. Get visualized statistics on your game collection.</p>
+              <p><a class="btn btn-lg btn-primary" href="#feat1" role="button">Learn More</a></p>
             </div>
           </div>
         </div>
@@ -100,7 +102,7 @@
         <div class="col-md-10">
           <h2 class="featurette-heading">GameHoarder <span class="text-muted">Manage your collection</span></h2>
           <p class="lead">GameHoarder is a video game management website that allows you to organize and visualize your
-video game collection, as well as find recommendations for new games.</p>
+video game collection as well as find recommendations for new games.</p>
         </div>
       </div>
 
@@ -118,7 +120,7 @@ video game collection, as well as find recommendations for new games.</p>
       <div class="row featurette" id="feat2">
         <div class="col-md-10">
           <h2 class="featurette-heading">Recommendations <span class="text-muted">Expand your collection</span></h2>
-          <p class="lead">Get recommendations for games to add to your collection based on the games you own. GameHoarder will track information about your game collection and provide you with recommendations based on the genres, developers or generations of games you prefer.</p>
+          <p class="lead">Get recommendations for games to add to your collection based on the games you own. GameHoarder will track information about your game collection and provide you with recommendations based on the genres, developers, and platforms of games you prefer.</p>
         </div>
       </div>
 
@@ -126,11 +128,10 @@ video game collection, as well as find recommendations for new games.</p>
       <!-- /END THE FEATURETTES -->
 
 
-      <!-- FOOTER -->
-      <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>
+     <!-- FOOTER -->
+      <div class="footer navbar-fixed-bottom">
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="privacy.php">Privacy</a> &middot; <a href="terms.php">Terms</a> &middot; <a href="#">Back to top</a></p>
+      </div>
 
     </div><!-- /.container -->
 

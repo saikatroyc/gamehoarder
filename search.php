@@ -71,8 +71,10 @@
       <form name="search_form" class="col-md-12" role="search" method="post">
         <div class="form-group">
           <input name="search_input" type="text" class="form-control" placeholder="Explore">
-          <input type="submit" name="search" class="btn btn-primary btn-lg btn-block" value="Searchby Games">
-          <input type="submit" name="dev" class="btn btn-primary btn-lg btn-block" value="Searchby Dev">
+          <br>
+          <input type="submit" name="search" class="btn btn-primary btn-lg btn-block" value="Search by Game">
+          <br>
+          <input type="submit" name="dev" class="btn btn-primary btn-lg btn-block" value="Search by Developer">
           <span><a href="#" class="pull-left">Need help?</a></span>
         </div>       
       </form>
@@ -103,16 +105,29 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
         echo "<div class=\"container\">
         <div class=\"row\">";
         for ($i = 0;$i < $numrows;$i++) {
+            $rating=func_getGameRating($conn, $game_list[$i]['name']);
             echo"
-                <div class=\"container thumbnail col-md-3\" >
+                <div class=\"container thumbnail col-md-3\" style=\"height:440px;\">
                 <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
                     <div class=\"caption\">
-                        <h5><strong>". $game_list[$i]['name'] . "</strong></h5><p>Rating: " . $game_list[$i]['rating'] . "</p>
-                        <p>Year: " . $game_list[$i]['year'] . "</p>
+                        <h5><strong>". $game_list[$i]['name'] . "</strong></h5>";
+                        if($rating==NULL)
+                        {
+                            echo"<p>No rating!</p>";
+                        }
+                        else
+                        {
+                            echo"<p>Rating: " . $rating . "</p>";
+                        }
+                        
+                        echo"<p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
+                        <p>Platform: " . $game_list[$i]['platform'] ."</p>
                         <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
                     </div>
                 </div>";
+            if($i>0 && $i%4==0)
+                echo"<br><br><br><br><br>";
         }
         echo"</div></div>";
     }
