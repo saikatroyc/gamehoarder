@@ -70,7 +70,7 @@
         <div id="sidebar-wrapper" style="top: 50px;">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="graphs.php">
+                    <a href="#">
                         Tracker options
                     </a>
                 </li>

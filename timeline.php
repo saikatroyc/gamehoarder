@@ -71,7 +71,7 @@
         <div id="sidebar-wrapper" style="top: 50px;">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="graphs.php">
+                    <a href="generalstats.php">
                         Tracker options
                     </a>
                 </li>

@@ -44,7 +44,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Home</a></li>
-          <li><a href="graphs.php" id="graphs">TrackUrGames</a></li>
+          <li><a href="generalstats.php" id="graphs">TrackUrGames</a></li>
           <li><a href="recommendations.php" id="recommend">Recommendations</a></li>
           <li><a href="search.php">Search</a></li>
         </ul>
