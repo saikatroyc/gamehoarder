@@ -84,10 +84,12 @@
                 <li>
                     <a href="generalstats.php#game_state_3d">Games in Progress</a>
                 </li>
+                <li>
+                    <a href="generalstats.php#game_pop_hist">Games Popularity</a>
+                </li>
             </ul>
         </div>
         </div><!-- end col-->
-        
         <div class="col-lg-8">
         <div id="page-content-wrapper" style="padding-left: 0px;">
             <div class="container-fluid">

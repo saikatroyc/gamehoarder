@@ -83,23 +83,25 @@
                 <li>
                     <a href="#game_state_3d">Games Progress Status</a>
                 </li>
+                <li>
+                    <a href="#game_pop_hist">Games Popularity</a>
+                </li>
             </ul>
+
         </div>
         </div><!-- end col-->
         
         <div class="col-lg-8">
 
 <div class="container-fluid">
-  <!--<div class="row">
-        <div id="chart_div">
-        </div>
-        <div id="filter_div"></div>
-  </div>-->
   <div class="row">
     <div id="genre_3d" style="width: 700px; height: 500px;"></div>
   </div>
   <div class="row" style="padding-top: 10px;">
     <div id="game_state_3d" style="width: 700px; height: 500px;"></div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div id="game_pop_hist" style="width: 700px; height: 500px;"></div>
   </div>
 </div>
         <div id="page-content-wrapper" style="padding-left: 0px;">
@@ -121,14 +123,20 @@
             $user_game_longest = func_getUserLongestGame($conn, $username);
             $user_game_completion_stat = func_getGameCompletionStat($conn, $username);
             $user_game_count_by_genre = func_getUserCountByGenre($conn, $username);
-
+            $user_game_count = func_getGamesByUserCount($conn, $username);
+            $chart_array_user_game_count[0]=array('Game', 'GameUserCount');
+            for($i=1;$i<=count($user_game_count);$i++)
+            {
+                $chart_array_user_game_count[$i]=array((string)$user_game_count[$i]['game'],intval($user_game_count[$i]['usercount']));
+            }
+            //echo "<h1>".count($chart_array_user_game_count)."</h1>";
+            //print_r($chart_array_user_game_count);
             // chart for games in repo by genre
             $chart_array[0]=array('Genre', 'GameCount');
             for($i=1;$i<=count($user_game_count_by_genre);$i++)
             {
                 $chart_array[$i]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
             }
-            $data_chart_array=json_encode($chart_array);
             // chart for game completion stat
             $chart_array_game_stat[0]=array('GameStatus', 'GameCount');
             $chart_array_game_stat[1]=array((string)'inprogress',intval($user_game_completion_stat['inprogress'][0]));
@@ -263,7 +271,7 @@
         var data = new google.visualization.DataTable();
         var data = google.visualization.arrayToDataTable(chdata);
         var options = {
-          title: ' Games by Genre in Repo',
+          title: 'Your Games by Genre',
           is3D: true,
         };
 
@@ -285,6 +293,23 @@
 
         var chart = new google.visualization.PieChart(document.getElementById('game_state_3d'));
         chart.draw(data, options);
+      }
+</script> 
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var chdata=JSON.parse( '<?php echo json_encode($chart_array_user_game_count) ?>' );
+        var data = new google.visualization.DataTable();
+        var data = google.visualization.arrayToDataTable(chdata);
+        var options = {
+          title: 'Your Games By Popularity',
+          vAxis: {title: 'Games',  titleTextStyle: {color: 'blue'}}
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('game_pop_hist'));
+        chart.draw(data, options);
+
       }
 </script> 
 <?php //echo "hello ". $_SESSION['username'];?>

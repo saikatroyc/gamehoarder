@@ -469,6 +469,33 @@ function func_getGameCompletionStat($conn, $user) {
     //print_r($op);
     return $op;
 }
+
+/*
+this func returns  the count of users for the games that a current user has
+*/
+function func_getGamesByUserCount($conn, $username) {
+
+    $result=NULL;
+    if ($conn) {
+        try {
+            // get top $count most trending games. Trend by user count
+            $stmt = $conn->prepare("select game, count(*) as Count from OwnsGames as OG1 where game in  (select game from OwnsGames where username='$username') group by game order by Count DESC");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['game']=$row[0];
+                $op[$count]['usercount']=$row[1];
+                $count++; 
+            }
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $op;
+}
 /**
  * Get user genre count
  */
