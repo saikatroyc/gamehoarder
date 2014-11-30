@@ -99,13 +99,16 @@ if ($numrows > 0) {
             <div class=\"col-md-3\" >
                 <h5>" . $game_list[$i]['platform'] . "</h5>
             </div>
-            <div class=\"col-md-3\" >
-                <p>
-                    <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"startGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Start</a>
-                    <!--a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"completeGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Complete</a-->
-                    <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a>
-                </p>
-            </div>";
+            <div class=\"col-md-3\" ><p>";
+                if ($game_list[$i]['startdate'] == NULL) {
+                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"startGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Start</a>";
+                } else if ($game_list[$i]['startdate'] != NULL && $game_list[$i]['enddate'] == NULL) {
+                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"completeGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Complete</a>";
+                } else if ($game_list[$i]['startdate'] != NULL && $game_list[$i]['enddate'] != NULL) {
+                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\">Completed</a>";
+                }
+                echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a>
+                </p></div>";
             if($game_list[$i]['rating']==NULL)
             {
                 echo"<div class=\"col-md-3\" >
@@ -209,6 +212,87 @@ if ($numrows > 0) {
         }
     }
     function startGameUser(game,user,id) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "startgameuser=" + encodeURIComponent(user) + 
+            "&startgame=" + encodeURIComponent(game);
+            str = "pdo_db_connect.php?" + str;
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }
+    }
+
+    function completeGameUser(game,user,id) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "endgameuser=" + encodeURIComponent(user) + 
+            "&endgame=" + encodeURIComponent(game);
+            str = "pdo_db_connect.php?" + str;
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }
     }
     function rateGameUser(game,user,id,rating) {
         // code for IE7+, Firefox, Chrome, Opera, Safari

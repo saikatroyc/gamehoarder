@@ -47,6 +47,23 @@ if(isset($_GET['unrateuser']) && isset($_GET['unrategame'])) {
     func_unrate_game_user($conn, $user_record);
     echo $user_record['game'];
 }
+/* add start date to a game */
+if(isset($_GET['startgame']) && isset($_GET['startgameuser'])) {
+    $conn = func_connect_db("gamehoarder");
+    $user_record['name'] = $_GET['startgameuser'];
+    $user_record['game'] = $_GET['startgame'];
+    func_update_game_startdate($conn,$_GET['startgameuser'], $_GET['startgame']);
+    echo $user_record['game'];
+}
+
+/* add end date to a game */
+if(isset($_GET['endgame']) && isset($_GET['endgameuser'])) {
+    $conn = func_connect_db("gamehoarder");
+    $user_record['name'] = $_GET['endgameuser'];
+    $user_record['game'] = $_GET['endgame'];
+    func_update_game_enddate($conn,$_GET['endgameuser'], $_GET['endgame']);
+    echo $user_record['game'];
+}
 
 /**
  * helper function to add end date for a game
@@ -58,6 +75,8 @@ function func_update_game_enddate($conn,$username, $game) {
             $enddate = date('Y-m-d');
             $s = $conn->prepare("UPDATE OwnsGames SET enddate = '$enddate' WHERE username = '$username' AND game = '$game'");
             $s->execute();
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 2, '$enddate')");
+            $s1->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -75,6 +94,8 @@ function func_update_game_startdate($conn,$username, $game) {
             $startdate = date('Y-m-d');
             $s = $conn->prepare("UPDATE OwnsGames SET startdate = '$startdate' WHERE username = '$username' AND game = '$game'");
             $s->execute();
+            $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 1, '$startdate')");
+            $s1->execute();
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -540,14 +561,16 @@ function func_getGamesUser($conn, $username) {
     $op=NULL;
     if ($conn) {
         try {
-            $stmt = $conn->prepare("SELECT OwnsGames.game, Games.platform, OwnsGames.rating FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE OwnsGames.username='$username'");
+            $stmt = $conn->prepare("SELECT OwnsGames.game, OwnsGames.startdate, OwnsGames.enddate, Games.platform, OwnsGames.rating FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE OwnsGames.username='$username'");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
                 $op[$count]['game']=$row[0];
-                $op[$count]['platform']=$row[1];      
-                $op[$count]['rating']=$row[2];      
+                $op[$count]['startdate']=$row[1];
+                $op[$count]['enddate']=$row[2];
+                $op[$count]['platform']=$row[3];      
+                $op[$count]['rating']=$row[4];      
                 $count++;                
             }
         } catch (PDOException $e) {
