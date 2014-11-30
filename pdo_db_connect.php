@@ -415,6 +415,60 @@ function func_getUserPlatformCount($conn, $username) {
     return $result;
 }
 
+function func_getUserCountByGenre($conn, $user) {
+    $result=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT genre, count(*) as Count FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$user' group by genre");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $count = 0;
+            foreach($result as $row) {
+                $op[$count]['genre']=$row[0];
+                $op[$count]['genrecount']=$row[1];
+                $count++; 
+            }             
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+            //print_r($op);
+    return $op;
+}
+
+/*
+this function returns the number of games complete, started or just in repo
+*/
+function func_getGameCompletionStat($conn, $user) {
+    $result=NULL;
+    $op = NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT count(*) FROM OwnsGames WHERE username = '$user' and startdate is not NULL and enddate is NULL");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $op['inprogress']=$result[0];
+            $result = NULL;
+            $stmt = $conn->prepare("SELECT count(*) FROM OwnsGames WHERE username = '$user' and startdate is not NULL and enddate is not NULL");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $op['complete']=$result[0];
+            $result = NULL;
+            $stmt = $conn->prepare("SELECT count(*) FROM OwnsGames WHERE username = '$user' and startdate is NULL and enddate is NULL");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $op['notstarted']=$result[0];
+            //print_r($op);
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+        }
+    }
+    //print_r($op);
+    return $op;
+}
 /**
  * Get user genre count
  */

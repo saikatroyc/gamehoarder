@@ -82,10 +82,7 @@
                     <a href="generalstats.php">General Stats</a>
                 </li>
                 <li>
-                    <a href="#">Games in Progress</a>
-                </li>
-                <li>
-                    <a href="#">Games Complete</a>
+                    <a href="generalstats.php#game_state_3d">Games in Progress</a>
                 </li>
             </ul>
         </div>
