@@ -107,8 +107,8 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
         for ($i = 0;$i < $numrows;$i++) {
             $rating=func_getGameRating($conn, $game_list[$i]['name']);
             echo"
-                <div class=\"container thumbnail col-md-3\" style=\"height:440px;\">
-                <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
+                <div class=\"container thumbnail col-md-3\" style=\"padding-left:10px;height:450px;\"><float>
+                <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/></float><float>
                     <div class=\"caption\">
                         <h5><strong>". $game_list[$i]['name'] . "</strong></h5>";
                         if($rating==NULL)
@@ -124,7 +124,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
                         <p>Platform: " . $game_list[$i]['platform'] ."</p>
                         <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
-                    </div>
+                    </div></float>
                 </div>";
             if($i>0 && $i%4==0)
                 echo"<br><br><br><br><br>";
