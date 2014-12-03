@@ -78,11 +78,11 @@ if(isset($_GET['endgameuser']) && isset($_GET['endgame']) && isset($_GET['endpla
 function func_isGameInList($conn,$username, $game, $platform) {
     if ($conn) {
         try {
-            $s = $conn->prepare("select * from OwnsGames where game='$game' and platform='$platform' and username='$username'");
+            $s = $conn->prepare("select count(*) from OwnsGames where game='$game' and platform='$platform' and username='$username'");
             $s->execute();
             $result=$stmt->fetchAll();
-            print_r($result);
-            return count($result);
+            //print_r($result);
+            return $result[0][0];
         } catch (PDOException $e) {
             echo "Could not insert to DB.\n";
             echo "getMessage(): " . $e->getMessage () . "\n";
@@ -899,7 +899,7 @@ function func_getGamesByDev($conn, $search) {
     } else {
         try {
             // uname is a primary key, so atmost one row expected
-            $stmt = $conn->prepare("SELECT Games.name, Games.rating, Games.genre, Games.year FROM Develops,Games WHERE Games.name = Develops.game AND Develops.developer LIKE ?");
+            $stmt = $conn->prepare("SELECT Games.name, Games.genre, Games.year FROM Develops,Games WHERE Games.name = Develops.game AND Develops.developer LIKE ?");
             $like="$search%";
             $stmt->execute(array($like));
             $result = $stmt->fetchAll();
@@ -1038,4 +1038,5 @@ function func_preparePublishesPDO($conn, $flag) {
     }
     return $s; 
 }
+
 ?>
