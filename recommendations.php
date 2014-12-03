@@ -108,6 +108,7 @@
     <div class=\"caption\">
     <h5><strong>". $game_list[$i]['name'] . "</strong></h5> 
     <h5><strong>score : ". $game_list[$i]['score'] . "</strong></h5> 
+    <h5>Platform: " . $game_list[$i]['platform'] ."</h5>
     <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". str_replace("'","\'",$game_list[$i]['name']) ."','".$_SESSION['username']. "','".$game_list[$i]['platform']. "')\">Add</p>
     </div>
 </div>";

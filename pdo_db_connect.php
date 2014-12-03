@@ -244,13 +244,13 @@ function func_getTopGamesByUsers($conn, $username, $count) {
     $op=NULL;
     if ($conn) {
         try {
-            // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("SELECT game, COUNT(*) AS usercount FROM OwnsGames WHERE game NOT IN (SELECT game FROM OwnsGames WHERE username = '$username') GROUP BY game ORDER BY usercount DESC LIMIT $count");
+            $stmt = $conn->prepare("select Game, Platform, usercount from (select game as Game, count(*) as usercount from OwnsGames where Game not in (select game from OwnsGames where username = '$username') group by Game limit $count) as PopularGame, Games where PopularGame.Game = Games.name order by usercount DESC");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
                 $op[$count]['name'] = $row[0];
+                $op[$count]['platform'] = $row[1];
                 $op[$count]['count'] = $row[1];
                 $count+=1;
             }
@@ -260,6 +260,7 @@ function func_getTopGamesByUsers($conn, $username, $count) {
             $conn = NULL;
         }
     }
+    print_r($op);
     return $op;
 
 }
@@ -304,12 +305,12 @@ function func_getRecommendations($conn, $username, $count) {
     if ($conn) {
         try {
             // 
-            $stmt = $conn->prepare("SELECT Pop.name AS game, (Gen.gencount + Pop.usercount) AS score
+            $stmt = $conn->prepare("SELECT Pop.name AS game, Gen.Platform AS Platform1, (Gen.gencount + Pop.usercount) AS score
                 FROM
-                (SELECT Games.genre AS genre, COUNT(Games.name) AS gencount
+                (SELECT Games.genre AS genre, Games.platform as Platform, COUNT(Games.name) AS gencount
                 FROM OwnsGames, Games
                 WHERE OwnsGames.username = '$username' AND OwnsGames.game = Games.name
-                GROUP BY genre) AS Gen,
+                GROUP BY genre, Platform) AS Gen,
 
                 (SELECT OwnsGames.game AS name, Games.genre AS genre, COUNT(*) AS usercount
                 FROM OwnsGames, Games
@@ -325,6 +326,7 @@ function func_getRecommendations($conn, $username, $count) {
             foreach($result as $row) {
                 $op[$count]['name'] = $row['game'];
                 $op[$count]['score'] = $row['score'];
+                $op[$count]['platform'] = $row['Platform1'];
                 $count+=1;
             }
         } catch (PDOException $e) {
@@ -333,6 +335,7 @@ function func_getRecommendations($conn, $username, $count) {
             $conn = NULL;
         }
     }
+    //print_r($op);
     return $op;
 
 }
