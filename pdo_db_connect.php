@@ -73,6 +73,24 @@ if(isset($_GET['endgameuser']) && isset($_GET['endgame']) && isset($_GET['endpla
 }
 
 /**
+ check if the game is in list
+*/
+function func_isGameInList($conn,$username, $game, $platform) {
+    if ($conn) {
+        try {
+            $s = $conn->prepare("select * from OwnsGames where game='$game' and platform='$platform' and username='$username'");
+            $s->execute();
+            $result=$stmt->fetchAll();
+            print_r($result);
+            return count($result);
+        } catch (PDOException $e) {
+            echo "Could not insert to DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    } return 0;
+}
+/**
  * helper function to add end date for a game
  */
 function func_update_game_enddate($conn,$username, $game, $platform) {
@@ -220,7 +238,7 @@ function func_getGameRating($conn, $game) {
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare('SELECT AVG(rating) FROM OwnsGames WHERE game="$game"');
+            $stmt = $conn->prepare("SELECT AVG(rating) FROM OwnsGames WHERE game='$game'");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $op=$result[0][0];
