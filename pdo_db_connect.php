@@ -260,7 +260,7 @@ function func_getTopGamesByUsers($conn, $username, $count) {
             $conn = NULL;
         }
     }
-    print_r($op);
+    //print_r($op);
     return $op;
 
 }

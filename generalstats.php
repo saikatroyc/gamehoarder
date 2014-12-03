@@ -134,7 +134,7 @@
                 $chart_array_user_game_count[$i]=array((string)$user_game_count[$i]['game'],intval($user_game_count[$i]['usercount']));
             }
             //echo "<h1>".count($chart_array_user_game_count)."</h1>";
-            //print_r($chart_array_user_game_count);
+            print_r($chart_array_user_game_count);
             // chart for games in repo by genre
             $chart_array_genre_count[0]=array('Genre', 'GameCount');
             for($i=1;$i<=count($user_game_count_by_genre);$i++)
@@ -190,7 +190,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
+    <!--<script src="js/jquery.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
