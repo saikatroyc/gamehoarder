@@ -80,6 +80,9 @@
                 <li>
                     <a href="recommendations_trend.php">Trending</a>
                 </li>
+                <li>
+                    <a href="recommendations_trend_platform.php">By Platform You Own</a>
+                </li>
             </ul>
         </div>
         </div><!-- end col-->

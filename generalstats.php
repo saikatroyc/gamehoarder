@@ -141,7 +141,7 @@
             {
                 $chart_array_genre_count[$i]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
             }
-            //print_r($chart_array_genre_count);
+           // print_r($chart_array_genre_count);
             // chart for game completion stat
             $chart_array_game_stat[0]=array('GameStatus', 'GameCount');
             $chart_array_game_stat[1]=array((string)'In progress',intval($user_game_completion_stat['inprogress'][0]));

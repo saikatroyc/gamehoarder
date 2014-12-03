@@ -275,14 +275,13 @@ function func_getTopGamesByUsersPlatform($conn, $username, $count) {
     $op=NULL;
     if ($conn) {
         try {
-            // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("SELECT game, COUNT(*) AS usercount FROM OwnsGames WHERE game NOT IN (SELECT game FROM OwnsGames WHERE username = '$username') GROUP BY game ORDER BY usercount DESC LIMIT $count");
+            $stmt = $conn->prepare("select name, platform from Games where platform in (select platform from OwnsGames where username='$username' group  by platform order by count(*) desc) and name not in (select OwnsGames.game from OwnsGames where username='$username') limit $count");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count=0;
             foreach($result as $row) {
                 $op[$count]['name'] = $row[0];
-                $op[$count]['count'] = $row[1];
+                $op[$count]['platform'] = $row[1];
                 $count+=1;
             }
         } catch (PDOException $e) {
