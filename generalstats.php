@@ -78,13 +78,16 @@
                     <a href="timeline.php">Timeline</a>
                 </li>
                 <li>
-                    <a href="#">General Stats</a>
+                    <a href="#">Games by Genre</a>
                 </li>
                 <li>
                     <a href="#game_state_3d">Games Progress Status</a>
                 </li>
                 <li>
                     <a href="#game_pop_hist">Games Popularity</a>
+                </li>
+                <li>
+                    <a href="#Summary">Summary</a>
                 </li>
             </ul>
 
@@ -147,22 +150,24 @@
             //print_r($user_game_completion_stat);
             $data_chart_array_game_stat=json_encode($chart_array_game_stat);
             //print_r($data_chart_array_game_stat);
-            echo "Total number of games: ".$user_game_count[0][0];
-            echo "<br><br>";
-            echo "Total number of platforms: ".$user_platform_count[0][0];
-            echo "<br><br>";
-            echo "Total number of genres: ".$user_genre_count[0][0];
-            echo "<br><br>";
-            echo "Platform with greatest number of games: ".$user_platform_most_games[0][0].", ".$user_platform_most_games[0][1];
-            echo "<br><br>";
-            echo "Developer with greatest number of games: ".$user_developer_most_games[0][0].", ".$user_developer_most_games[0][1];
-            echo "<br><br>";
-            echo "First game in collection: ".$user_first_game[0][0];
-            echo "<br><br>";
+            echo "<div id=\"Summary\"><p><h2>Total number of games: ".$user_game_count[0][0];
+            echo "</h2></p>";
+            echo "<p><h2>Total number of platforms: ".$user_platform_count[0][0];
+            echo "</h2></p>";
+            echo "<p><h2>Total number of genres: ".$user_genre_count[0][0];
+            echo "</h2></p>";
+            echo "<p><h2>Platform with greatest number of games: ".$user_platform_most_games[0][0].", ".$user_platform_most_games[0][1];
+            echo "</h2></p>";
+            echo "<p><h2>Developer with greatest number of games: ".$user_developer_most_games[0][0].", ".$user_developer_most_games[0][1];
+            echo "</h2></p>";
+            echo "<p><h2>First game in collection: ".$user_first_game[0][0];
+            echo "</h2></p>";
             if($user_avg_rating[0][0]==NULL)
-                echo "User average rating: 0";            
-            else
-                echo "User average rating: ".$user_avg_rating[0][0];            
+                echo "<p><h2>User average rating: 0</h2></p>";            
+            else {
+                echo "<p><h2>User average rating: ".$user_avg_rating[0][0] . "</h2></p>";
+            }
+            echo "</div>";
         }     
     }
 

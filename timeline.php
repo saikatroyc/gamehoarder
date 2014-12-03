@@ -79,13 +79,16 @@
                     <a href="#">Timeline</a>
                 </li>
                 <li>
-                    <a href="generalstats.php">General Stats</a>
+                    <a href="generalstats.php#">Games by Genre</a>
                 </li>
                 <li>
-                    <a href="generalstats.php#game_state_3d">Games in Progress</a>
+                    <a href="generalstats.php#game_state_3d">Games Progress Status</a>
                 </li>
                 <li>
                     <a href="generalstats.php#game_pop_hist">Games Popularity</a>
+                </li>
+                <li>
+                    <a href="generalstats.php#Summary">Summary</a>
                 </li>
             </ul>
         </div>

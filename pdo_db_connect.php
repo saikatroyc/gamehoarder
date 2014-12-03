@@ -442,7 +442,6 @@ function func_getUserCountByGenre($conn, $user) {
             $conn = NULL;
         }
     }
-    print_r($op);
     return $op;
 }
 
