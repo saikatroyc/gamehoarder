@@ -6,21 +6,24 @@
 /*
 * Code for inserting an entry into game-user relation.
 */
-if(isset($_GET['insertuser']) && isset($_GET['insertgame'])) {
+if(isset($_GET['insertuser']) && isset($_GET['insertgame']) && isset($_GET['insertplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['insertuser'];
     $user_record['game'] = $_GET['insertgame'];
+    $user_record['platform'] = $_GET['insertplatform'];
     $user_record['date'] = date('Y-m-d');
     func_insert_game_user($conn, $user_record);
+    echo $user_record['game'];
 }
 
 /*
 * Code for deleting an entry from game-user relation.
 */
-if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
+if(isset($_GET['deleteuser']) && isset($_GET['deletegame']) && isset($_GET['deleteplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['deleteuser'];
     $user_record['game'] = $_GET['deletegame'];
+    $user_record['platform'] = $_GET['deleteplatform'];
     func_delete_game_user($conn, $user_record);
     echo $user_record['game'];
 }
@@ -28,10 +31,11 @@ if(isset($_GET['deleteuser']) && isset($_GET['deletegame'])) {
 /*
 * Code for rating a game.
 */
-if(isset($_GET['rateuser']) && isset($_GET['rategame']) && isset($_GET['raterating'])) {
+if(isset($_GET['rateuser']) && isset($_GET['rategame']) && isset($_GET['rateplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['rateuser'];
     $user_record['game'] = $_GET['rategame'];
+    $user_record['platform'] = $_GET['rateplatform'];
     $user_record['rating'] = $_GET['raterating'];
     func_rate_game_user($conn, $user_record);
     echo $user_record['game'];
@@ -40,40 +44,43 @@ if(isset($_GET['rateuser']) && isset($_GET['rategame']) && isset($_GET['raterati
 /*
 * Code for undoing game rating.
 */
-if(isset($_GET['unrateuser']) && isset($_GET['unrategame'])) {
+if(isset($_GET['unrateuser']) && isset($_GET['unrategame']) && isset($_GET['unrateplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['unrateuser'];
     $user_record['game'] = $_GET['unrategame'];
+    $user_record['platform'] = $_GET['unrateplatform'];
     func_unrate_game_user($conn, $user_record);
     echo $user_record['game'];
 }
 /* add start date to a game */
-if(isset($_GET['startgame']) && isset($_GET['startgameuser'])) {
+if(isset($_GET['startgameuser']) && isset($_GET['startgame']) && isset($_GET['startplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['startgameuser'];
     $user_record['game'] = $_GET['startgame'];
-    func_update_game_startdate($conn,$_GET['startgameuser'], $_GET['startgame']);
+    $user_record['platform'] = $_GET['startplatform'];
+    func_update_game_startdate($conn,$user_record['name'],$user_record['game'], $user_record['platform']);
     echo $user_record['game'];
 }
 
 /* add end date to a game */
-if(isset($_GET['endgame']) && isset($_GET['endgameuser'])) {
+if(isset($_GET['endgameuser']) && isset($_GET['endgame']) && isset($_GET['endplatform'])) {
     $conn = func_connect_db("gamehoarder");
     $user_record['name'] = $_GET['endgameuser'];
     $user_record['game'] = $_GET['endgame'];
-    func_update_game_enddate($conn,$_GET['endgameuser'], $_GET['endgame']);
+    $user_record['platform'] = $_GET['endplatform'];
+    func_update_game_enddate($conn,$user_record['name'],$user_record['game'], $user_record['platform']);
     echo $user_record['game'];
 }
 
 /**
  * helper function to add end date for a game
  */
-function func_update_game_enddate($conn,$username, $game) {
+function func_update_game_enddate($conn,$username, $game, $platform) {
     // assoc array passed as input
     if ($conn) {
         try {
             $enddate = date('Y-m-d');
-            $s = $conn->prepare("UPDATE OwnsGames SET enddate = '$enddate' WHERE username = '$username' AND game = '$game'");
+            $s = $conn->prepare("UPDATE OwnsGames SET enddate = '$enddate' WHERE username = '$username' AND game = '$game' AND platform='$platform'");
             $s->execute();
             $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 2, '$enddate')");
             $s1->execute();
@@ -87,12 +94,12 @@ function func_update_game_enddate($conn,$username, $game) {
 /**
  * helper function to add start date for a game
  */
-function func_update_game_startdate($conn,$username, $game) {
+function func_update_game_startdate($conn,$username, $game, $platform) {
     // assoc array passed as input
     if ($conn) {
         try {
             $startdate = date('Y-m-d');
-            $s = $conn->prepare("UPDATE OwnsGames SET startdate = '$startdate' WHERE username = '$username' AND game = '$game'");
+            $s = $conn->prepare("UPDATE OwnsGames SET startdate = '$startdate' WHERE username = '$username' AND game = '$game' AND platform='$platform'");
             $s->execute();
             $s1 = $conn->prepare("INSERT INTO UserHistory (eventtime, username, game, action, date) value (NOW(), '$username', '$game', 1, '$startdate')");
             $s1->execute();
@@ -115,7 +122,7 @@ function func_insert_game_user($conn, $user_record) {
     // assoc array passed as input
     if ($conn) {
         try {
-            $s = $conn->prepare("INSERT INTO OwnsGames (username, game, adddate) value (:name, :game, :date)");
+            $s = $conn->prepare("INSERT INTO OwnsGames (username, game, platform, adddate) value (:name, :game, :platform, :date)");
             $s->execute($user_record);
             $username = $user_record['name'];
             $currdate = $user_record['date'];
@@ -140,7 +147,7 @@ function func_insert_game_user($conn, $user_record) {
 function func_delete_game_user($conn, $user_record) {
     if ($conn) {
         try {
-            $stmt = $conn->prepare("DELETE FROM OwnsGames WHERE username=:name AND game=:game");
+            $stmt = $conn->prepare("DELETE FROM OwnsGames WHERE username=:name AND game=:game AND platform=:platform");
             $stmt->execute($user_record);
             $username = $user_record['name'];
             $currdate = date('Y-m-d');
@@ -166,7 +173,7 @@ function func_delete_game_user($conn, $user_record) {
 function func_rate_game_user($conn, $user_record) {
     if ($conn) {
         try {
-            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=:rating WHERE username=:name AND game=:game");
+            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=:rating WHERE username=:name AND game=:game AND platform=:platform");
             $stmt->execute($user_record);
             $username = $user_record['name'];
             $currdate = date('Y-m-d');
@@ -192,7 +199,7 @@ function func_rate_game_user($conn, $user_record) {
 function func_unrate_game_user($conn, $user_record) {
     if ($conn) {
         try {
-            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=NULL WHERE username=:name AND game=:game");
+            $stmt = $conn->prepare("UPDATE OwnsGames SET rating=NULL WHERE username=:name AND game=:game AND platform=:platform");
             $stmt->execute($user_record);
         } catch (PDOException $e) {
             echo "Could not update record from DB.\n";
@@ -213,7 +220,7 @@ function func_getGameRating($conn, $game) {
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("SELECT AVG(rating) FROM OwnsGames WHERE game=\"$game\"");
+            $stmt = $conn->prepare('SELECT AVG(rating) FROM OwnsGames WHERE game="$game"');
             $stmt->execute();
             $result=$stmt->fetchAll();
             $op=$result[0][0];
@@ -403,7 +410,7 @@ function func_getUserPlatformCount($conn, $username) {
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("SELECT COUNT(*) FROM (SELECT DISTINCT platform FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$username') AS platforms");
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM (SELECT DISTINCT platform FROM OwnsGames WHERE username = '$username') AS platforms");
             $stmt->execute();
             $result=$stmt->fetchAll();
         } catch (PDOException $e) {
@@ -417,6 +424,7 @@ function func_getUserPlatformCount($conn, $username) {
 
 function func_getUserCountByGenre($conn, $user) {
     $result=NULL;
+    $op=NULL;
     if ($conn) {
         try {
             $stmt = $conn->prepare("SELECT genre, count(*) as Count FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$user' group by genre");
@@ -434,8 +442,25 @@ function func_getUserCountByGenre($conn, $user) {
             $conn = NULL;
         }
     }
-            //print_r($op);
+    print_r($op);
     return $op;
+}
+
+function func_getUserAvgRating($conn, $user) {
+    $result=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT AVG(rating) FROM OwnsGames WHERE username = '$user'");
+            $stmt->execute();
+            $result=$stmt->fetchAll();           
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+            //print_r($op);
+    return $result;
 }
 
 /*
@@ -526,7 +551,7 @@ function func_getUserPlatformMax($conn, $username) {
     if ($conn) {
         try {
             // get top $count most trending games. Trend by user count
-            $stmt = $conn->prepare("SELECT platform, COUNT(*) AS platcount FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$username' GROUP BY platform ORDER BY platcount DESC LIMIT 1");
+            $stmt = $conn->prepare("SELECT platform, COUNT(*) AS platcount FROM OwnsGames WHERE username = '$username' GROUP BY platform ORDER BY platcount DESC LIMIT 1");
             $stmt->execute();
             $result=$stmt->fetchAll();
         } catch (PDOException $e) {
@@ -642,7 +667,7 @@ function func_getGamesUser($conn, $username) {
     $op=NULL;
     if ($conn) {
         try {
-            $stmt = $conn->prepare("SELECT OwnsGames.game, OwnsGames.startdate, OwnsGames.enddate, Games.platform, OwnsGames.rating FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE OwnsGames.username='$username'");
+            $stmt = $conn->prepare("SELECT game, startdate, enddate, platform, rating FROM OwnsGames  WHERE username='$username'");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count=0;

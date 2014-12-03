@@ -124,6 +124,7 @@
             $user_game_completion_stat = func_getGameCompletionStat($conn, $username);
             $user_game_count_by_genre = func_getUserCountByGenre($conn, $username);
             $user_game_count = func_getGamesByUserCount($conn, $username);
+            $user_avg_rating = func_getUserAvgRating($conn, $username);
             $chart_array_user_game_count[0]=array('Game', 'GameUserCount');
             for($i=1;$i<=count($user_game_count);$i++)
             {
@@ -132,16 +133,17 @@
             //echo "<h1>".count($chart_array_user_game_count)."</h1>";
             //print_r($chart_array_user_game_count);
             // chart for games in repo by genre
-            $chart_array[0]=array('Genre', 'GameCount');
+            $chart_array_genre_count[0]=array('Genre', 'GameCount');
             for($i=1;$i<=count($user_game_count_by_genre);$i++)
             {
-                $chart_array[$i]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
+                $chart_array_genre_count[$i]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
             }
+            //print_r($chart_array_genre_count);
             // chart for game completion stat
             $chart_array_game_stat[0]=array('GameStatus', 'GameCount');
-            $chart_array_game_stat[1]=array((string)'inprogress',intval($user_game_completion_stat['inprogress'][0]));
-            $chart_array_game_stat[2]=array((string)'complete',intval($user_game_completion_stat['complete'][0]));
-            $chart_array_game_stat[3]=array((string)'notstarted',intval($user_game_completion_stat['notstarted'][0]));
+            $chart_array_game_stat[1]=array((string)'In progress',intval($user_game_completion_stat['inprogress'][0]));
+            $chart_array_game_stat[2]=array((string)'Complete',intval($user_game_completion_stat['complete'][0]));
+            $chart_array_game_stat[3]=array((string)'Not started',intval($user_game_completion_stat['notstarted'][0]));
             //print_r($user_game_completion_stat);
             $data_chart_array_game_stat=json_encode($chart_array_game_stat);
             //print_r($data_chart_array_game_stat);
@@ -157,6 +159,10 @@
             echo "<br><br>";
             echo "First game in collection: ".$user_first_game[0][0];
             echo "<br><br>";
+            if($user_avg_rating[0][0]==NULL)
+                echo "User average rating: 0";            
+            else
+                echo "User average rating: ".$user_avg_rating[0][0];            
         }     
     }
 
@@ -211,7 +217,7 @@
     </script>
     <script>
     </script>
- <script type="text/javascript">
+<!-- <script type="text/javascript">
 
       // Load the Visualization API and the controls package.
       google.load('visualization', '1.0', {'packages':['controls']});
@@ -223,7 +229,7 @@
       // instantiates a dashboard, a range slider and a pie chart,
       // passes in the data and draws it.
       function drawDashboard() {
-        var chdata=JSON.parse( '<?php echo json_encode($chart_array) ?>' );
+        var chdata=JSON.parse( '<?php /*echo json_encode($chart_array_genre_count)*/ ?>' );
         var data = new google.visualization.DataTable();
         var data = google.visualization.arrayToDataTable(chdata);
 
@@ -259,15 +265,15 @@
 
         // Draw the dashboard.
         dashboard.draw(data);
-      }
+          }
 
-</script>
+</script>-->
 
 <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
-        var chdata=JSON.parse( '<?php echo json_encode($chart_array) ?>' );
+        var chdata=JSON.parse( '<?php echo json_encode($chart_array_genre_count) ?>' );
         var data = new google.visualization.DataTable();
         var data = google.visualization.arrayToDataTable(chdata);
         var options = {

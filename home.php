@@ -101,29 +101,29 @@ if ($numrows > 0) {
             </div>
             <div class=\"col-md-3\" ><p>";
                 if ($game_list[$i]['startdate'] == NULL) {
-                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"startGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Start</a>";
+                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"startGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."','".$game_list[$i]['platform']. "')\">Start</a>";
                 } else if ($game_list[$i]['startdate'] != NULL && $game_list[$i]['enddate'] == NULL) {
-                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"completeGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Complete</a>";
+                    echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"completeGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."','".$game_list[$i]['platform']. "')\">Complete</a>";
                 } else if ($game_list[$i]['startdate'] != NULL && $game_list[$i]['enddate'] != NULL) {
                     echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\">Completed</a>";
                 }
-                echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Delete</a>
+                echo "<a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."','".$game_list[$i]['platform']. "')\">Delete</a>
                 </p></div>";
             if($game_list[$i]['rating']==NULL)
             {
                 echo"<div class=\"col-md-3\" >
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 1)\">1</a>
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 2)\">2</a>
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 3)\">3</a>
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 4)\">4</a>
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."', 5)\">5</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."', 1,'".$game_list[$i]['platform']. "')\">1</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."', 2,'".$game_list[$i]['platform']. "')\">2</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."', 3,'".$game_list[$i]['platform']. "')\">3</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."', 4,'".$game_list[$i]['platform']. "')\">4</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"rateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."', 5,'".$game_list[$i]['platform']. "')\">5</a>
                 </div></div>"; 
             }
             else
             {
                 echo"<div class=\"col-md-3\" >
                         Rating: ".$game_list[$i]['rating']."
-                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteRateGameUser('". $game_list[$i]['game'] ."','".$_SESSION['username']. "','gamerow".$i."')\">Cancel</a>
+                        <a href=\"#\" id=\"mybutton1\" class=\"btn btn-default\" onclick=\"deleteRateGameUser('". str_replace("'","\'",$game_list[$i]['game']) ."','".$_SESSION['username']. "','gamerow".$i."','".$game_list[$i]['platform']. "')\">Cancel</a>
                 </div></div>";             
             }
     }
@@ -170,7 +170,7 @@ if ($numrows > 0) {
     {
         document.getElementById("info").innerHTML="TBD://game recommendations";
     }
-    function deleteGameUser(game,user,id) {
+    function deleteGameUser(game,user,id,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
@@ -178,7 +178,8 @@ if ($numrows > 0) {
         {
             xmlHttp=new XMLHttpRequest();
             var str = "deleteuser=" + encodeURIComponent(user) + 
-            "&deletegame=" + encodeURIComponent(game);
+            "&deletegame=" + encodeURIComponent(game) +
+            "&deleteplatform=" + encodeURIComponent(platform);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   
@@ -211,7 +212,7 @@ if ($numrows > 0) {
             alert('Communication N1 ERROR:['+e.message+']');
         }
     }
-    function startGameUser(game,user,id) {
+    function startGameUser(game,user,id,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
@@ -219,7 +220,8 @@ if ($numrows > 0) {
         {
             xmlHttp=new XMLHttpRequest();
             var str = "startgameuser=" + encodeURIComponent(user) + 
-            "&startgame=" + encodeURIComponent(game);
+            "&startgame=" + encodeURIComponent(game) +
+            "&startplatform=" + encodeURIComponent(platform);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   
@@ -253,7 +255,7 @@ if ($numrows > 0) {
         }
     }
 
-    function completeGameUser(game,user,id) {
+    function completeGameUser(game,user,id,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
@@ -261,7 +263,8 @@ if ($numrows > 0) {
         {
             xmlHttp=new XMLHttpRequest();
             var str = "endgameuser=" + encodeURIComponent(user) + 
-            "&endgame=" + encodeURIComponent(game);
+            "&endgame=" + encodeURIComponent(game) +
+            "&endplatform=" + encodeURIComponent(platform);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   
@@ -294,7 +297,7 @@ if ($numrows > 0) {
             alert('Communication N1 ERROR:['+e.message+']');
         }
     }
-    function rateGameUser(game,user,id,rating) {
+    function rateGameUser(game,user,id,rating, platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
@@ -303,7 +306,8 @@ if ($numrows > 0) {
             xmlHttp=new XMLHttpRequest();
             var str = "rateuser=" + encodeURIComponent(user) + 
             "&rategame=" + encodeURIComponent(game) +
-            "&raterating=" + encodeURIComponent(rating);
+            "&raterating=" + encodeURIComponent(rating) +
+            "&rateplatform=" + encodeURIComponent(platform);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   
@@ -336,7 +340,7 @@ if ($numrows > 0) {
             alert('Communication N1 ERROR:['+e.message+']');
         }
     }
-    function deleteRateGameUser(game,user,id) {
+    function deleteRateGameUser(game,user,id,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;
@@ -344,7 +348,8 @@ if ($numrows > 0) {
         {
             xmlHttp=new XMLHttpRequest();
             var str = "unrateuser=" + encodeURIComponent(user) + 
-            "&unrategame=" + encodeURIComponent(game);
+            "&unrategame=" + encodeURIComponent(game) +
+            "&unrateplatform=" + encodeURIComponent(platform);
             str = "pdo_db_connect.php?" + str;
             xmlHttp.onreadystatechange=function()
             {   

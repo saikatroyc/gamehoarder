@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             func_insert_new_user($conn, $user_record);
             func_closeDbConection($conn);
             // toast user that account created. prompt to login
-            echo "<h2>registered!! please <a href='index.php'>login</a> back again to continue</h2>"; 
+            echo "<h2>Registered! Please <a href='login.php'>login</a> to continue</h2>"; 
         }
     }
 end:

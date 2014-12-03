@@ -107,7 +107,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
         for ($i = 0;$i < $numrows;$i++) {
             $rating=func_getGameRating($conn, $game_list[$i]['name']);
             echo"
-                <div class=\"container thumbnail col-md-3\" style=\"padding-left:10px;height:450px;\"><float>
+                <div class=\"container thumbnail col-md-3\" style=\"padding-left:10px;height:500px;\"><float>
                 <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/></float><float>
                     <div class=\"caption\">
                         <h5><strong>". $game_list[$i]['name'] . "</strong></h5>";
@@ -123,7 +123,7 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
                         echo"<p>Year: " . $game_list[$i]['year'] . "</p>
                         <p>Genre: " . $game_list[$i]['genre'] ."</p>
                         <p>Platform: " . $game_list[$i]['platform'] ."</p>
-                        <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
+                        <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". str_replace("'","\'",$game_list[$i]['name']) ."','".$_SESSION['username']. "','".$game_list[$i]['platform']. "')\">Add</p>
                     </div></float>
                 </div>";
             if($i>0 && $i%4==0)
@@ -136,15 +136,48 @@ if (isset($_POST['search']) || isset($_POST['dev'])) {
 ?>
 
 <script type="text/javascript">
-    function insertGameUser(game,user) {
+    function insertGameUser(game,user,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
-        var xmlhttp=new XMLHttpRequest();
-        var str = "insertuser=" + encodeURIComponent(user) + 
-        "&insertgame=" + encodeURIComponent(game);
-        str = "pdo_db_connect.php?" + str;
-        alert(game+" added to collection");
-        xmlhttp.open("GET",str,true);
-        xmlhttp.send();
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "insertuser=" + encodeURIComponent(user) + 
+            "&insertgame=" + encodeURIComponent(game) +
+            "&insertplatform=" + encodeURIComponent(platform);
+            str = "pdo_db_connect.php?" + str;
+            alert(game+" added to collection");
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+/*                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');*/
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        }        
     }
 </script>
 <script type="text/javascript">

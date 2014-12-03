@@ -108,7 +108,7 @@
     <div class=\"caption\">
     <h5><strong>". $game_list[$i]['name'] . "</strong></h5> 
     <h5><strong>users : ". $game_list[$i]['count'] . "</strong></h5> 
-    <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". $game_list[$i]['name'] ."','".$_SESSION['username']. "')\">Add</p>
+    <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". str_replace("'","\'",$game_list[$i]['name']) ."','".$_SESSION['username']. "','".$game_list[$i]['platform']. "')\">Add</p>
     </div>
 </div>";
         }   
@@ -132,8 +132,7 @@
 
       <!-- FOOTER -->
       <div class="footer navbar-fixed-bottom">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p class="pull-right">&copy; 2014 GameHoarder; <a href="#">Privacy</a> &middot; <a href="#">Terms</a> &middot; <a href="#">Back to top</a></p>
       </div>
 
 
@@ -171,15 +170,49 @@
     }
     </script>
     <script type="text/javascript">
-    function insertGameUser(game,user) {
+    function insertGameUser(game,user,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
-        var xmlhttp=new XMLHttpRequest();
-        var str = "insertuser=" + encodeURIComponent(user) + 
-        "&insertgame=" + encodeURIComponent(game);
-        str = "pdo_db_connect.php?" + str;
-        alert(game+" added to collection");
-        xmlhttp.open("GET",str,true);
-        xmlhttp.send();
+        var xmlHttp=null;
+        var sres;
+        try
+        {
+            xmlHttp=new XMLHttpRequest();
+            var str = "insertuser=" + encodeURIComponent(user) + 
+            "&insertgame=" + encodeURIComponent(game) +
+            "&insertplatform=" + encodeURIComponent(platform);
+            str = "pdo_db_connect.php?" + str;
+            alert(game+" added to collection");
+            xmlHttp.onreadystatechange=function()
+            {   
+                if(xmlHttp.readyState==4)
+                {
+                    if(xmlHttp.status==200)
+                    {
+                        sres=xmlHttp.responseText;
+                        alert(sres);
+                        if(sres.length>0)
+                        {
+                            if(sres!='')
+                            {
+                                location.reload();
+                            }
+                            else
+                                alert('Communication NK ERROR');
+                        }
+                        else
+                            alert('Communication N2 ERROR');
+                    }
+                    else
+                        alert('Communication ERROR. Returned status code:['+xmlHttp.status+']('+xmlHttp.statusText+')');
+                }
+            }
+            xmlHttp.open('GET',str,true);
+            xmlHttp.send();
+        }    
+        catch(e)
+        {
+            alert('Communication N1 ERROR:['+e.message+']');
+        } 
     }
     </script>
   </body>
