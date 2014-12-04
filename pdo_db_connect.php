@@ -269,7 +269,7 @@ function func_getTopGamesByUsers($conn, $username, $count) {
             foreach($result as $row) {
                 $op[$count]['name'] = $row[0];
                 $op[$count]['platform'] = $row[1];
-                $op[$count]['count'] = $row[1];
+                $op[$count]['count'] = $row[2];
                 $count+=1;
             }
         } catch (PDOException $e) {
@@ -312,6 +312,37 @@ function func_getTopGamesByUsersPlatform($conn, $username, $count) {
 
 }
 
+function func_getTopRatedGames($conn, $username, $count) {
+    // assoc array passed as input
+    $result=NULL;
+    $op=NULL;
+    if ($conn) {
+        try {
+            $stmt = $conn->prepare("SELECT game, platform, AVG(rating) AS avgrating 
+                FROM OwnsGames
+                WHERE game NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username') 
+                GROUP BY game 
+                ORDER BY avgrating DESC
+                LIMIT $count");
+            $stmt->execute();
+            $result=$stmt->fetchAll();
+            $count=0;
+            foreach($result as $row) {
+                $op[$count]['name'] = $row[0];
+                $op[$count]['platform'] = $row[1];
+                $op[$count]['rating'] = $row[2];
+                $count+=1;
+            }
+        } catch (PDOException $e) {
+            echo "Could not select record from DB.\n";
+            echo "getMessage(): " . $e->getMessage () . "\n";
+            $conn = NULL;
+        }
+    }
+    return $op;
+
+}
+
 /**
  * this is a function to return recommendations
  */
@@ -322,7 +353,7 @@ function func_getRecommendations($conn, $username, $count) {
     if ($conn) {
         try {
             // 
-            $stmt = $conn->prepare("SELECT Pop.name AS game, Gen.Platform AS Platform1, (Gen.gencount + Pop.usercount) AS score
+            $stmt = $conn->prepare("SELECT Pop.name AS game, Gen.Platform AS Platform1, ((Gen.gencount/Owned.gamecount + Pop.usercount/Total.totalusers) * 5 + Rating.avgrating) AS score
                 FROM
                 (SELECT Games.genre AS genre, Games.platform as Platform, COUNT(Games.name) AS gencount
                 FROM OwnsGames, Games
@@ -332,9 +363,15 @@ function func_getRecommendations($conn, $username, $count) {
                 (SELECT OwnsGames.game AS name, Games.genre AS genre, COUNT(*) AS usercount
                 FROM OwnsGames, Games
                 WHERE OwnsGames.game = Games.name
-                GROUP BY OwnsGames.game) AS Pop
+                GROUP BY OwnsGames.game) AS Pop,
+
+                (SELECT COUNT(*) as gamecount FROM OwnsGames WHERE username = '$username') AS Owned,
+
+                (SELECT COUNT(*) as totalusers FROM Users) AS Total,
+
+                (SELECT game, AVG(rating) AS avgrating FROM OwnsGames GROUP BY game) AS Rating
                 
-                WHERE Gen.genre = Pop.genre AND Pop.name NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username')
+                WHERE Gen.genre = Pop.genre AND Pop.name = Rating.game AND Pop.name NOT IN (select OwnsGames.game FROM OwnsGames where OwnsGames.username = '$username')
                 ORDER BY score DESC
                 LIMIT $count");
             $stmt->execute();

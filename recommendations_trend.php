@@ -81,6 +81,9 @@
                     <a href="#">Trending</a>
                 </li>
                 <li>
+                    <a href="recommendations_rating.php">Top Rated</a>
+                </li>
+                <li>
                     <a href="recommendations_trend_platform.php">By Platform You Own</a>
                 </li>
             </ul>

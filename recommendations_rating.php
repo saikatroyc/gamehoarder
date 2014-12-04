@@ -74,14 +74,14 @@
                         Recommendation options
                     </a>
                 </li>
-                <li class="active">
-                    <a href="#">By Your Most Popular Genre</a>
+                <li>
+                    <a href="recommendations.php">By Your Most Popular Genre</a>
                 </li>
                 <li>
                     <a href="recommendations_trend.php">Trending</a>
                 </li>
                 <li>
-                    <a href="recommendations_rating.php">Top Rated</a>
+                    <a href="#">Top Rated</a>
                 </li>
                 <li>
                     <a href="recommendations_trend_platform.php">By Platform You Own</a>
@@ -102,22 +102,20 @@
                         require 'pdo_db_connect.php';
                         $conn = func_connect_db("gamehoarder");
                         $username=$_SESSION['username'];
-                        $game_list=func_getRecommendations($conn, $username, 10);
+                        $game_list = func_getTopRatedGames($conn, $username, 20);
                         $numrows = count($game_list);
                         if ($numrows > 0) {
                         echo "<div class=\"container\">
                         <div class=\"row\">";
                         for ($i = 0;$i < $numrows;$i++) {
-                        echo"
-<div class=\"container thumbnail col-lg-3\" >
+                        echo "<div class=\"container thumbnail col-lg-3\" >
     <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
     <div class=\"caption\">
     <h5><strong>". $game_list[$i]['name'] . "</strong></h5> 
-    <h5><strong>score : ". $game_list[$i]['score'] . "</strong></h5> 
     <h5>Platform: " . $game_list[$i]['platform'] ."</h5>
+    <h5><strong>rating : ". $game_list[$i]['rating'] . "</strong></h5> 
     <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". str_replace("'","\'",$game_list[$i]['name']) ."','".$_SESSION['username']. "','".$game_list[$i]['platform']. "')\">Add</p>
-    </div>
-</div>";
+    </div></div>";
         }   
         echo"</div></div>";
     }
@@ -177,7 +175,7 @@
     }
     </script>
     <script type="text/javascript">
-    function insertGameUser(game,user, platform) {
+    function insertGameUser(game,user,platform) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlHttp=null;
         var sres;

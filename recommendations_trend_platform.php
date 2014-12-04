@@ -81,6 +81,9 @@
                     <a href="recommendations_trend.php">Trending</a>
                 </li>
                 <li>
+                    <a href="recommendations_rating.php">Top Rated</a>
+                </li>
+                <li>
                     <a href="#">By Platform You Own</a>
                 </li>
             </ul>
@@ -110,7 +113,7 @@
     <img src=\"" . func_getGameImage($conn, $game_list[$i]['name']) ."\" width=\"300\" height=\"240\"/>
     <div class=\"caption\">
     <h5><strong>". $game_list[$i]['name'] . "</strong></h5> 
-    <h5><strong>users : ". $game_list[$i]['platform'] . "</strong></h5> 
+    <h5><strong>platform : ". $game_list[$i]['platform'] . "</strong></h5> 
     <p id=\"mybutton1\" class=\"btn btn-primary\" onclick=\"insertGameUser('". str_replace("'","\'",$game_list[$i]['name']) ."','".$_SESSION['username']. "','".$game_list[$i]['platform']. "')\">Add</p>
     </div>
 </div>";
