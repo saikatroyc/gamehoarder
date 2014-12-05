@@ -6,5 +6,10 @@ allows users to keep track of their game collections. Users are able to searchfo
 
 
 [Notes:
-1.Images in images/ folder needs to be given permission for rw.]
+1.Images in images/ folder needs to be given permission for rw.
+2. To import any sql use 
+mysql -u <username> -p<password> gamehoarder < <dump.sql>
+3. to export the sql
+mysqldump -u <username> -p<password> gamehoarder > <dump.sql>
+]
 
