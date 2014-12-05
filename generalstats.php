@@ -117,7 +117,7 @@
         $conn = func_connect_db("gamehoarder");
         if ($conn) {
             $username = $_SESSION['username'];
-            $user_game_count = func_getUserGameCount($conn, $username);
+            $user_own_game_count = func_getUserGameCount($conn, $username);
             $user_platform_count = func_getUserPlatformCount($conn, $username);
             $user_genre_count = func_getUserGenreCount($conn, $username);
             $user_platform_most_games = func_getUserPlatformMax($conn, $username);
@@ -150,7 +150,7 @@
             //print_r($user_game_completion_stat);
             $data_chart_array_game_stat=json_encode($chart_array_game_stat);
             //print_r($data_chart_array_game_stat);
-            echo "<div id=\"Summary\"><p><h2>Total number of games: ".$user_game_count[0][0];
+            echo "<div id=\"Summary\"><p><h2>Total number of games: ".$user_own_game_count[0][0];
             echo "</h2></p>";
             echo "<p><h2>Total number of platforms: ".$user_platform_count[0][0];
             echo "</h2></p>";
