@@ -102,7 +102,7 @@
                         require 'pdo_db_connect.php';
                         $conn = func_connect_db("gamehoarder");
                         $username=$_SESSION['username'];
-                        $game_list = func_getTopGamesByUsersPlatform($conn, $username, 20);
+                        $game_list = func_getTopGamesByUsersPlatform($conn, $username, 50);
                         $numrows = count($game_list);
                         if ($numrows > 0) {
                         echo "<div class=\"container\">
