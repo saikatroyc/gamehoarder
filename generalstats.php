@@ -129,19 +129,21 @@
             $user_game_count = func_getGamesByUserCount($conn, $username);
             $user_avg_rating = func_getUserAvgRating($conn, $username);
             $chart_array_user_game_count[0]=array('Game', 'GameUserCount');
-            for($i=1;$i<=count($user_game_count);$i++)
+            for($i=0;$i<=count($user_game_count);$i++)
             {
-                $chart_array_user_game_count[$i]=array((string)$user_game_count[$i]['game'],intval($user_game_count[$i]['usercount']));
+                $j = $i + 1;
+                $chart_array_user_game_count[$j]=array((string)$user_game_count[$i]['game'],intval($user_game_count[$i]['usercount']));
             }
             //echo "<h1>".count($chart_array_user_game_count)."</h1>";
             //print_r($chart_array_user_game_count);
             // chart for games in repo by genre
             $chart_array_genre_count[0]=array('Genre', 'GameCount');
-            for($i=1;$i<=count($user_game_count_by_genre);$i++)
+            for($i=0;$i<=count($user_game_count_by_genre);$i++)
             {
-                $chart_array_genre_count[$i]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
+                $j = $i + 1;
+                $chart_array_genre_count[$j]=array((string)$user_game_count_by_genre[$i]['genre'],intval($user_game_count_by_genre[$i]['genrecount']));
             }
-           // print_r($chart_array_genre_count);
+            //print_r($chart_array_genre_count);
             // chart for game completion stat
             $chart_array_game_stat[0]=array('GameStatus', 'GameCount');
             $chart_array_game_stat[1]=array((string)'In progress',intval($user_game_completion_stat['inprogress'][0]));

@@ -484,7 +484,7 @@ function func_getUserCountByGenre($conn, $user) {
     $op=NULL;
     if ($conn) {
         try {
-            $stmt = $conn->prepare("SELECT genre, count(*) as Count FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name WHERE username = '$user' group by genre");
+            $stmt = $conn->prepare("SELECT genre, count(*) as Count FROM OwnsGames JOIN Games ON OwnsGames.game=Games.name  and OwnsGames.platform = Games.platform WHERE username = '$user' group by genre");
             $stmt->execute();
             $result=$stmt->fetchAll();
             $count = 0;
