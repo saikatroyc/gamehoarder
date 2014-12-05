@@ -6,6 +6,5 @@ allows users to keep track of their game collections. Users are able to searchfo
 
 
 [Notes:
-1.Images in images/ folder needs to be given permission for rw.
-timeline.]
+1.Images in images/ folder needs to be given permission for rw.]
 
